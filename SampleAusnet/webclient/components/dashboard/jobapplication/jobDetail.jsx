@@ -3,6 +3,13 @@ import {Divider,Button,Card,Image} from 'semantic-ui-react';
 import Axios from 'axios';
 export default class JobDetail extends React.Component {
 
+  constructor() {
+    super();
+    this.state = {
+      disabled:'true'
+  };
+}
+
   static get contextTypes() {
       return {
         socket:React.PropTypes.object.isRequired
@@ -28,16 +35,16 @@ let approvalData={
   //   console.log(error+"error in jobDetail for status");
   // });
 }
-componentDidMount=()=>{
-  this.context.socket.on('approvalConfirmation', (msg) => {
-    console.log(msg);
-    alert(msg.data);
-      // alert(msg.data);
-      // this.setState({chatmessage:msg.data});
-        // console.log('Queued');
-        // this.setState({openDialogue: msg.status,dialogueMessage:msg.message});
-      });
-}
+// componentDidMount=()=>{
+//   this.context.socket.on('approvalConfirmation', (msg) => {
+//     console.log(msg);
+//     alert(msg.data);
+//       // alert(msg.data);
+//       // this.setState({chatmessage:msg.data});
+//         // console.log('Queued');
+//         // this.setState({openDialogue: msg.status,dialogueMessage:msg.message});
+//       });
+// }
 
 render () {
 return (
@@ -61,7 +68,7 @@ return (
       </Card.Description>
 
         <div>
-          <Button basic color='green' onClick={this.sendApproveMsg}>Approve</Button>
+          <Button basic color='green' onClick={this.sendApproveMsg} >Approve</Button>
         </div>
       </Card.Content>
 

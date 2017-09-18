@@ -98,6 +98,7 @@ getjobDetails=()=>{
 						console.log(data.data.message);
             this.setState({jobData:data.data.message});
 						console.log(this.state.jobData);
+						this.setState({jobDetailArr:this.state.jobData[0]});
           }.bind(this))
           .catch(function (error) {
             console.log(error+"error in jobDetail for status");
