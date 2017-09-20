@@ -40,7 +40,7 @@ getJobProfile=(localApplicationNumber)=>
 	// 	type:'applicationID',
 	// 	value:localApplicationNumber
 	// };
- Axios.get('/api/v1/Job/'+localApplicationNumber)
+ Axios.get('/api/v1/Job/')
  .then(function (data) {
 	 data.data.message.forEach((data)=>{
 		 if(data.applicationID==localApplicationNumber){
@@ -60,6 +60,7 @@ getjobDetails=()=>{
 											 method:'get',
 													 url:'/api/v1/Job',
 									 }).then((result) => {
+										 console.log('all request sent to server');
 										  let arr=[],arr1=[],arr2=[];
 										result.data.message.forEach((data,i)=>{
 								     //to filter jobs acc. to stages
@@ -103,7 +104,7 @@ getjobDetails=()=>{
 //get job state from child Component
 handleJobStages=(data)=>
 {
-	this.state.jobState=data;
+ this.state.jobState=data;
  this.setState({jobState:this.state.jobState});
 
 	if(this.state.jobState=='ALL')
@@ -111,7 +112,7 @@ handleJobStages=(data)=>
 		this.getjobDetails();
 	}
 	else {
-		this.handleJobFilter(this.state.jobState);
+		this.handleJobFilter(data);
 	}
 
 }

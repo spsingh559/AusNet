@@ -112,9 +112,9 @@ controller.getFilterData=function(req,res){
  //  console.log(req.params);
  //  // console.log(req.params.ApplicantNumber);
  // let arr=[];
- console.log(req.params.applicationRequest);
-  var par=req.params.ApplicantNumber;
-  if()
+  // console.log(req.params.applicationRequest);
+  var par=req.params.applicationRequest;
+  // if()
  //  console.log('Application number in get api is' + par);
  //  console.log(par);
  //  mainData.forEach((data)=>{
