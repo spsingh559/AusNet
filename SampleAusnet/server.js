@@ -38,11 +38,15 @@ io.on('connection',function(socket){
 var redisClient = redis.createClient({host:'127.0.0.1',port:6379});
 
   redisClient.subscribe('ApprovalChanel');
+  redisClient.subscribe('InitiateJobRequestRedis');
   console.log('subscribe here');
   redisClient.on('message', (channel, message) => {
  console.log('-----------subscribe get data----------');
  // io.emit('approvalConfirmation', {data:message});
  console.log(message);
+ if(channel=='InitiateJobRequestRedis'){
+    io.emit('initiateJObSocketWeb', message);
+ }
 });
 
 

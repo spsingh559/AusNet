@@ -31,8 +31,8 @@ export default class JobStages extends React.Component {
          <Radio
            label='UpcomingJobs'
            name='radioGroup'
-           value='UpcomingJobs'
-          checked={this.state.value === 'UpcomingJobs'}
+           value='Awaiting Approval'
+          checked={this.state.value === 'Awaiting Approval'}
            onChange={this.handleChange}
          />
           <Label circular style={{float:'right'}}>{this.props.upcomingArrlen}</Label>
@@ -41,8 +41,8 @@ export default class JobStages extends React.Component {
          <Radio
            label='OngoingJobs'
            name='radioGroup'
-           value='OngoingJobs'
-           checked={this.state.value === 'OngoingJobs'}
+           value='Ongoing'
+           checked={this.state.value === 'Ongoing'}
            onChange={this.handleChange}
          />
           <Label circular style={{float:'right'}}>{this.props.ongoingArrlen}</Label>
@@ -51,8 +51,8 @@ export default class JobStages extends React.Component {
          <Radio
            label='CompletedJobs'
            name='radioGroup'
-           value='CompletedJobs'
-           checked={this.state.value === 'CompletedJobs'}
+           value='Completed'
+           checked={this.state.value === 'Completed'}
            onChange={this.handleChange}
          />
           <Label circular style={{float:'right'}}>{this.props.completedArrlen}</Label>

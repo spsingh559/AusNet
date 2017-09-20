@@ -39,7 +39,7 @@ getJobProfile=(localApplicationNumber)=>
  Axios.get('/api/v1/Job/')
  .then(function (data) {
 	 data.data.message.forEach((data)=>{
-		 if(data.ApplicantNumber==localApplicationNumber){
+		 if(data.applicationID==localApplicationNumber){
 			 //set the state here for individual application number -------------- later we ll do server side api for each application number
 			 this.setState({jobDetailArr:data});
 		 }
@@ -61,19 +61,19 @@ getjobDetails=()=>{
 										  let arr=[],arr1=[],arr2=[];
 										result.data.message.forEach((data,i)=>{
 								     //to filter jobs acc. to stages
-								      if(data.status=='UpcomingJobs')
+								      if(data.status=='Awaiting Approval')
 								      {
 								        arr.push(data);
 
 
 								    }
-										else if(data.status=='OngoingJobs')
+										else if(data.status=='Ongoing')
 										{
 											arr1.push(data);
 
 
 									}
-									else if(data.status=='CompletedJobs'){
+									else if(data.status=='Completed'){
 										arr2.push(data);
 
 									}
@@ -134,18 +134,18 @@ getNumberOfJobs=()=>
 		 let arr=[],arr1=[],arr2=[];
 	 result.data.message.forEach((data,i)=>{
 
-		 if(data.status=='UpcomingJobs')
+		 if(data.status=='Awaiting Approval')
 		 {
 			 arr.push(data);
 
 
 	 }
-	 else if(data.status=='OngoingJobs')
+	 else if(data.status=='Ongoing')
 	 {
 		 arr1.push(data);
 
  }
- else if(data.status=='CompletedJobs'){
+ else if(data.status=='Completed'){
 	 arr2.push(data);
 
  }
@@ -187,7 +187,7 @@ else  {
 componentDidMount()
 {
 	this.getNumberOfJobs();
-	this.state.jobState='UpcomingJobs';
+	this.state.jobState='Awaiting Approval';
 	this.setState({jobState:this.state.jobState});
 		this.handleJobFilter(this.state.jobState);
 }
