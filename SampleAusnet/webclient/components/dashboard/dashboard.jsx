@@ -36,7 +36,11 @@ getAppNoDetails=(data)=>
 // api function to get job  Details of a particular application number
 getJobProfile=(localApplicationNumber)=>
 {
- Axios.get('/api/v1/Job/')
+	// let data={
+	// 	type:'applicationID',
+	// 	value:localApplicationNumber
+	// };
+ Axios.get('/api/v1/Job/'+localApplicationNumber)
  .then(function (data) {
 	 data.data.message.forEach((data)=>{
 		 if(data.applicationID==localApplicationNumber){
@@ -56,29 +60,20 @@ getjobDetails=()=>{
 											 method:'get',
 													 url:'/api/v1/Job',
 									 }).then((result) => {
-
-										// this.setState({jobData:result.data.message});
 										  let arr=[],arr1=[],arr2=[];
 										result.data.message.forEach((data,i)=>{
 								     //to filter jobs acc. to stages
 								      if(data.status=='Awaiting Approval')
 								      {
 								        arr.push(data);
-
-
 								    }
 										else if(data.status=='Ongoing')
 										{
 											arr1.push(data);
-
-
 									}
 									else if(data.status=='Completed'){
 										arr2.push(data);
-
 									}
-
-
 								    })
 
 								     this.setState({upcomingArr:arr});
