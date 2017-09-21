@@ -66,7 +66,7 @@ var JobApplicationData=require('./Job.Model');
 
 controller.getJobData=function(req,res){
 
-  console.log('api connected for get');
+  console.log('api connected for get for all application');
 
    JobApplicationData.find({}).exec(function(err,data){
           if(err) { console.log('server error in get'+err); }
@@ -113,7 +113,60 @@ controller.getFilterData=function(req,res){
  //  // console.log(req.params.ApplicantNumber);
  // let arr=[];
   // console.log(req.params.applicationRequest);
-  var par=req.params.applicationRequest;
+  console.log('api connected for each application data');
+  // var par=req.params.applicationRequest;
+  console.log(req.params);
+  console.log(req.params.applicationRequest);
+  if(req.params.applicationRequest=='Awaiting Approval' ||req.params.applicationRequest=='Ongoing'||req.params.applicationRequest=='Completed'){
+    JobApplicationData.find({status:req.params.applicationRequest}).exec(function(err,data){
+             if(err) { console.log('server error in get'+err); }
+             else{
+               // console.log(data);
+              //  console.log(data);
+              res.json({message:data});
+             }
+           });
+  }else{
+    JobApplicationData.find({applicationID:req.params.applicationRequest}).exec(function(err,data){
+             if(err) { console.log('server error in get'+err); }
+             else{
+               // console.log(data);
+              //  console.log(data);
+              res.json({message:data});
+             }
+           });
+  }
+  // console.log(req.params.applicationRequest.type);
+  // console.log(req.params.applicationRequest[0]);
+    // console.log(req.params.applicationRequest[0].type);
+      // console.log(req.params.applicationRequest[type]);
+      // console.log(req.params.applicationRequest[0].applicationRequest);
+      // console.log(req.params.applicationRequest[0].applicationRequest.type);
+//   for(var property in req.params.applicationRequest) {
+//     console.log(property + "=" + req.params.applicationRequest[property]);
+// }
+  // res.send({message:req.params.applicationRequest});
+  // if(req.params.type=='status'){
+  //   JobApplicationData.find({status:req.params.value}).exec(function(err,data){
+  //          if(err) { console.log('server error in get'+err); }
+  //          else{
+  //            // console.log(data);
+  //           //  console.log(data);
+  //           res.json({message:data});
+  //          }
+  //        });
+  //
+  // }else{
+  //   JobApplicationData.find({applicationID:req.params.value}).exec(function(err,data){
+  //          if(err) { console.log('server error in get'+err); }
+  //          else{
+  //            // console.log(data);
+  //           //  console.log(data);
+  //           res.json({message:data});
+  //          }
+  //        });
+  // }
+  // console.log(par);
   // if()
  //  console.log('Application number in get api is' + par);
  //  console.log(par);
@@ -123,14 +176,14 @@ controller.getFilterData=function(req,res){
  //    }
  //  });
  //  res.send({message:arr});
-  JobApplicationData.find({status:par}).exec(function(err,data){
-         if(err) { console.log('server error in get'+err); }
-         else{
-           // console.log(data);
-          //  console.log(data);
-          res.json({message:data});
-         }
-       });
+  // JobApplicationData.find({status:par}).exec(function(err,data){
+  //        if(err) { console.log('server error in get'+err); }
+  //        else{
+  //          // console.log(data);
+  //         //  console.log(data);
+  //         res.json({message:data});
+  //        }
+  //      });
 
 }
 

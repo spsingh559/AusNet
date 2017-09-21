@@ -23,6 +23,7 @@ export default class CompletedJobs extends React.Component {
   let arr=[];
   this.props.completedArr.forEach((data,i)=>{
 		arr.push(<div key={i}>
+			
 			<List >
 			<List.Item value={data.applicationID} onClick={this.handleClick} >
 

@@ -24,15 +24,14 @@ export default class UpcomingJobs extends React.Component {
   let arr=[];
   this.props.upcomingArr.forEach((data,i)=>{
 		arr.push(<div key={i}>
+			
 			<List >
 			<List.Item value={data.applicationID} onClick={this.handleClick} >
 
 					<List.Header as='a' >Application number:{data.applicationID }</List.Header>
 					<List.Description as='a' >Status:{data.status }</List.Description>
 					<br></br>
-
 			</List.Item>
-
 		</List>
 		</div>);
 

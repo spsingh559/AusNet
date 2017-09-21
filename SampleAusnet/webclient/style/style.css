@@ -1,0 +1,51 @@
+.background{
+  background-image: url("../images/bg2.jpg");
+  position: relative;
+  height: 1400px;
+  /*background-color: GHOSTWHITE;*/
+  /*opacity:0.5;*/
+
+}
+
+#logo{
+  height: 100px;
+  width: 100px;
+  margin-left: 120px;
+}
+#ip1{
+  margin-top: 2px;
+  width: 330px;
+  margin-left: -2px;
+}
+
+
+#input{
+  text-align: center;
+}
+
+#forgot{
+  text-decoration: underline;
+}
+h5{
+  color:black;
+  margin-left: -130px;
+}
+
+#forgot:hover{
+
+  color: black;
+}
+
+.seg{
+ padding-top: 170px;
+ margin-left: 530px;
+ width: 350px;
+ height:390px;
+
+}
+
+
+#form {
+   width: 100%;
+ margin-top: 250px;
+}

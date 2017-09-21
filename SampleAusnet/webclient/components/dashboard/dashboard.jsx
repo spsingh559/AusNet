@@ -31,26 +31,27 @@ export default class Dashboard extends React.Component {
 getAppNoDetails=(data)=>
 {
 	this.getJobProfile(data);
+
 }
 
 // api function to get job  Details of a particular application number
-getJobProfile=(localApplicationNumber)=>
-{
-	// let data={
-	// 	type:'applicationID',
-	// 	value:localApplicationNumber
-	// };
- Axios.get('/api/v1/Job/')
+getJobProfile=(localApplicationNumber)=>{
+	console.log('api call for each application from client');
+	console.log('app id is');
+	console.log(localApplicationNumber);
+ Axios.get('/api/v1/Job/'+localApplicationNumber)
  .then(function (data) {
-	 data.data.message.forEach((data)=>{
-		 if(data.applicationID==localApplicationNumber){
-			 //set the state here for individual application number -------------- later we ll do server side api for each application number
-			 this.setState({jobDetailArr:data});
-		 }
-	 })
+  console.log('data from server is');
+  console.log(data);
+  data.data.message.forEach((data)=>{
+ 	 if(data.applicationID==localApplicationNumber){
+ 		 //set the state here for individual application number -------------- later we ll do server side api for each application number
+ 		 this.setState({jobDetailArr:data});
+ 	 }
+  })
  }.bind(this))
  .catch(function (error) {
-	 console.log(error+"error in jobDetail for status");
+  console.log(error+"error in jobDetail for status");
  });
 }
 
@@ -88,7 +89,11 @@ getjobDetails=()=>{
 
 							 //api function to get a particular jobstate details
 							 handleJobFilter=(data)=>{
-
+								 console.log('in handleJobFilter');
+								 console.log('request is'+ data);
+								 let applicationRequest={
+									 value:data
+								 }
           Axios.get('/api/v1/Job/'+data)
           .then(function (data) {
 						console.log(data.data.message);
@@ -191,8 +196,8 @@ componentDidMount()
 
 		return (
 			<div >
-				<Container>
-					<h1></h1>
+
+				
  <Grid columns={3} divided >
 	 <Grid.Row stretched>
 		 <Grid.Column width={4} style={{background:'#ABEBC6'}}>
@@ -216,7 +221,7 @@ componentDidMount()
 	 </Grid.Row>
  </Grid>
 
-</Container>
+
 </div>
 
 

@@ -21,6 +21,7 @@ export default class OngoingJobs extends React.Component {
   let arr=[];
   this.props.ongoingArr.forEach((data,i)=>{
 		arr.push(<div key={i}>
+			
 			<List >
 			<List.Item value={data.applicationID} onClick={this.handleClick} >
 

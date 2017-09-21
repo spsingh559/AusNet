@@ -1,81 +1,88 @@
 import React from 'react';
 import {Button,
-        Container,
-        Icon,
-        Label,
-        Input,
-        Grid,
-        Image,
-        }
-        from 'semantic-ui-react';
-        import { Link } from 'react-router';
+Container,
+Input,
+Grid,
+Image,
+Segment
+}
+from 'semantic-ui-react';
+import { Link } from 'react-router';
 // import './style/style.css';
 import Axios from 'axios';
 export default class Login extends React.Component {
 constructor(props){
-  super(props);
-  this.state={
-  username:'',
-  password:''
-  }
-  this.handleUsername=this.handleUsername.bind(this);
-  this.handlePassword=this.handlePassword.bind(this);
-  this.handleClick = this.handleClick.bind(this);
- }
+super(props);
+this.state={
+Id:'',
+password:''
+}
+this.handleUsername=this.handleUsername.bind(this);
+this.handlePassword=this.handlePassword.bind(this);
+this.handleClick = this.handleClick.bind(this);
+}
 handleUsername(e){
-this.setState({ username: e.target.value });
-//console.log("gfgfffffffff"+this.state.username);
+this.setState({ Id: e.target.value });
 }
 handlePassword(e){
-  this.setState({ password: e.target.value });
+this.setState({ password: e.target.value });
 }
-handleClick() {
-console.log("gfgfffffffff"+this.state.username);
-var data1=[
-  this.state.username,
-  this.state.password
-];
-console.log(data1+"jjjjjjjjjjjjjjjjjjjjj");
-  Axios({
-                 method:'post',
-                   url:'/api/v1/Employee/'+[data1],
-             })
-        .then((result) => {
-                 console.log('Login details connected to server for post');
-            console.log(result);
-                     console.log(data1);
-         })
-         .catch((error) => {
-                console.log(error);
-                                console.log(error+"error in Login data for post");
-         });
- }
+static get contextTypes() {
+return {
+socket:React.PropTypes.object.isRequired,
+router: React.PropTypes.object.isRequired
+}
+}
+handleClick(e) {
+let data={Id:this.state.Id,pwd:this.state.password};
+Axios({
+method:'post',
+url:'/api/v1/Employee/',
+data:data
+})
+.then((data1) => {
+console.log('Login details connected to server for post');
+if(data1.data.message=='succes'){
+this.context.router.push('/dashboard');
+alert('Successfully logged in!!!');
+}else{
+// this.context.router.push('/');
+//do validation here for time being
+alert('Please enter valid Credentials!!!');
+}
+console.log(data1);
+})
+.catch((error) => {
+console.log(error);
+console.log(error+"error in Login data for post");
+});
+}
 render() {
-    return (
-          <div class="row" style= {{backgroundImage: "url('https://www.fool.com.au/wp-content/uploads/2016/03/pylons-933274_1920.jpg')",
-            height:'1300px'
-          }}>
-          <div>
-           <Image src='https://www.ausnetservices.com.au/-/media/Images/AusNet/Common/logo_ausnet.ashx?la=en&hash=52AA8B8D08166A07F90AE9667C208C23702A3AF5'
-              centered
-              style={{width:'100px',height:'100px', marginBottom:'50px'}}/>
-          </div>
-          <Grid.Row columns={8}>
-          <Grid.Column style={{textAlign: 'center',marginTop:'50px'}}>
-          <Label as='a' color='teal' size='large'>
-              Please Enter your Credentials</Label><br/><br/>
-            <Input icon='user' iconPosition='left' value={this.state.username} onChange = {this.handleUsername}
-          placeholder=' Username' /><br/><br/>
-        <Input icon='key' type='password' iconPosition='left' value={this.state.password} onChange = {this.handlePassword}
-            placeholder=' Password' />
+return (
+<div className="background">
+  <div className='seg'>
+    <Segment raised secondary >
+    <div id='logo'>
+      <Image src='../images/logo.png' />
+    </div>
+    <Grid.Row columns={8}>
+      <Grid.Column id='input'>
+        <h5>
+        Please enter your credentials
+        </h5><br/><br/>
+        <Input id='ip1' value={this.state.username} onChange = {this.handleUsername}
+        placeholder=' Username'/><br/><br/>
+        <Input id='ip1' type='password' value={this.state.password} onChange = {this.handlePassword}
+        placeholder=' Password' width='200px'/>
         <br/><br/>
-      <a href="#" color='black'>Forgot Password</a><br/><br/>
-               <Link to="/dashboard">
-               <Button type='submit' color='teal' size='medium' onClick= {this.handleClick}>Submit</Button>
-               </Link>
-            </Grid.Column>
-            </Grid.Row>
-         </div>
-    );
-  }
+        <a id='forgot' href="#">Forgot Password</a><br/><br/>
+        <Button  type='submit' primary size='medium' onClick= {this.handleClick} onEnter={this.handleClick}>Login</Button>
+      </Grid.Column>
+    </Grid.Row>
+    </Segment>
+  </div>
+
+</div>
+);
+}
 }
