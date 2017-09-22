@@ -22,21 +22,21 @@ export default class JobProgressChild extends React.Component {
     const stepIndex = 2;
     // const contentStyle = {margin: '0 16px'};
     console.log('job progress data for each application')
-    console.log(this.props.data);
+    // console.log(this.props.data);
     let arr=[];
     let arr1=[];
     if(this.props.data!=undefined || this.props.data!=null){
       console.log('inside execution part');
       let count=0;
     this.props.data.forEach((data,i)=>{
-      console.log(data);
-      console.log(i);
+      // console.log(data);
+      // console.log(i);
 
       if(i<=4){
-      arr.push(<Step><StepLabel>{data.name.slice(0, 7)} <br /> {data.time}</StepLabel></Step>);
+      arr.push(<Step key={i}><StepLabel>{data.name.slice(0, 7)} <br /> {data.time}</StepLabel></Step>);
     }else{
 
-    arr1.push(<Step><StepLabel>{data.name.slice(0, 7)} <br /> {data.time}</StepLabel></Step>);
+    arr1.push(<Step key={i}><StepLabel>{data.name.slice(0, 7)} <br /> {data.time}</StepLabel></Step>);
     }
     if(data.status==true){
       count++;

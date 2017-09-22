@@ -31,8 +31,8 @@ export default class JobStages extends React.Component {
          <Radio
            label='UpcomingJobs'
            name='radioGroup'
-           value='Awaiting Approval'
-          checked={this.state.value === 'Awaiting Approval'}
+           value='NotStarted'
+          checked={this.state.value === 'NotStarted'}
            onChange={this.handleChange}
          />
           <Label circular style={{float:'right'}}>{this.props.upcomingArrlen}</Label>

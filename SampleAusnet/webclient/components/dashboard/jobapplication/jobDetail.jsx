@@ -1,13 +1,14 @@
 import React from 'react';
 import {Divider,Button,Card,Image} from 'semantic-ui-react';
 import Axios from 'axios';
+import RaisedButton from 'material-ui/RaisedButton';
 export default class JobDetail extends React.Component {
 
   constructor() {
     super();
     this.state = {
       disabled:'true',
-      initiateJobStatus:false,
+      initiateJobStatus:'',
   };
 }
 
@@ -47,7 +48,32 @@ componentDidMount=()=>{
       });
 }
 
+pauseJob=()=>{
+  alert('request sent to operator');
+}
+
 render () {
+  let buttonStatus;
+  let cardStatus=null;
+  switch (this.props.jobDetailArr.status) {
+    case 'NotStarted':  buttonStatus=null;
+                          cardStatus=null;
+      break;
+    case 'Awaiting Approval':buttonStatus=[<RaisedButton label="Approve Job" onTouchTap={this.sendApproveMsg} primary={true}  />]
+                              cardStatus=null;
+    break;
+    case 'Ongoing':buttonStatus=[<RaisedButton label="Pause Job" onTouchTap={this.pauseJob} secondary={true}  />]
+                  this.props.jobDetailArr.JobProgress.forEach((data)=>{
+                    if(data.stepID==5 && data.status==true){
+                      cardStatus=[<Card><Image src='../images/permit Image.JPG' /> </Card>]
+                    }
+                  })
+    break;
+    case 'Completed':buttonStatus=null;
+                      cardStatus=[<Card><Image src='../images/permit Image.JPG' /> </Card>]
+    default:
+
+  }
 return (
 
     <div>
@@ -56,23 +82,18 @@ return (
   <Card>
     <Card.Content>
       <Card.Header>
-        Operating Auth. No:<br/>{this.props.jobDetailArr.OperatingAuthNo}<br/>
+        Operating Auth. No:{this.props.jobDetailArr.operatingAuthNo}<br/>
       </Card.Header>
-      <Card.Meta>
-          Status: <br/>{this.props.jobDetailArr.status}<br/>
-      </Card.Meta>
-      <Card.Description>
-        Location:<br/>{this.props.jobDetailArr.location}<br/>
-        Scheduled Start time:<br/>{this.props.jobDetailArr.startTime}<br/>
-        Scheduled Interruption time:<br/>{this.props.jobDetailArr.scheduledInterruptionTime}
 
+      <Card.Description>
+      <b>  Location:</b>{this.props.jobDetailArr.location}<br/>
+        <b>Scheduled Start time</b><br/>{this.props.jobDetailArr.startTime}<br/>
+      <b>  Scheduled Interruption time</b><br/>{this.props.jobDetailArr.scheduledInterruptionTime}<br />
+      <b>  Status:</b> {this.props.jobDetailArr.status}<br/>
       </Card.Description>
 
         <div>
-          {
-            this.state.initiateJobStatus? <Button basic color='green' onClick={this.sendApproveMsg} >Approve</Button>:
-              <Button basic color='green'  disabled={true}>Approve</Button>
-          }
+          {buttonStatus }
 
         </div>
       </Card.Content>
@@ -92,9 +113,7 @@ return (
       </Card.Description>
     </Card.Content>
   </Card>
-  <Card>
-
-  </Card>
+  {cardStatus}
 </Card.Group>
     </div>
   );

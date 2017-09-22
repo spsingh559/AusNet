@@ -1,7 +1,9 @@
 .background{
   background-image: url("../images/bg2.jpg");
   position: relative;
-  height: 1400px;
+  height: 700px;
+ overflow: hidden;
+ background-repeat: no-repeat;
   /*background-color: GHOSTWHITE;*/
   /*opacity:0.5;*/
 

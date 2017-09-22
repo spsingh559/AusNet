@@ -65,7 +65,7 @@ getjobDetails=()=>{
 										  let arr=[],arr1=[],arr2=[];
 										result.data.message.forEach((data,i)=>{
 								     //to filter jobs acc. to stages
-								      if(data.status=='Awaiting Approval')
+								      if(data.status=='NotStarted')
 								      {
 								        arr.push(data);
 								    }
@@ -91,9 +91,9 @@ getjobDetails=()=>{
 							 handleJobFilter=(data)=>{
 								 console.log('in handleJobFilter');
 								 console.log('request is'+ data);
-								 let applicationRequest={
-									 value:data
-								 }
+								//  let applicationRequest={
+								// 	 value:data
+								//  }
           Axios.get('/api/v1/Job/'+data)
           .then(function (data) {
 						console.log(data.data.message);
@@ -135,7 +135,7 @@ getNumberOfJobs=()=>
 		 let arr=[],arr1=[],arr2=[];
 	 result.data.message.forEach((data,i)=>{
 
-		 if(data.status=='Awaiting Approval')
+		 if(data.status=='NotStarted')
 		 {
 			 arr.push(data);
 
@@ -172,7 +172,7 @@ if(data=='ALL'){
 
 	return <JobList jobState={this.state.jobState}  upcomingArr={this.state.upcomingArr} ongoingArr={this.state.ongoingArr} completedArr={this.state.completedArr} getAppNoDetails={this.getAppNoDetails}/>
 }
-else if (data=='UpcomingJobs') {
+else if (data=='NotStarted') {
 
 	return <UpcomingJobs jobState={this.state.jobState} upcomingArr={this.state.jobData} getAppNoDetails={this.getAppNoDetails}/>
 }
@@ -188,7 +188,7 @@ else  {
 componentDidMount()
 {
 	this.getNumberOfJobs();
-	this.state.jobState='Awaiting Approval';
+	this.state.jobState='NotStarted';
 	this.setState({jobState:this.state.jobState});
 		this.handleJobFilter(this.state.jobState);
 }
@@ -197,7 +197,7 @@ componentDidMount()
 		return (
 			<div >
 
-				
+
  <Grid columns={3} divided >
 	 <Grid.Row stretched>
 		 <Grid.Column width={4} style={{background:'#ABEBC6'}}>

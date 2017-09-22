@@ -117,7 +117,7 @@ controller.getFilterData=function(req,res){
   // var par=req.params.applicationRequest;
   console.log(req.params);
   console.log(req.params.applicationRequest);
-  if(req.params.applicationRequest=='Awaiting Approval' ||req.params.applicationRequest=='Ongoing'||req.params.applicationRequest=='Completed'){
+  if(req.params.applicationRequest=='NotStarted' ||req.params.applicationRequest=='Ongoing'||req.params.applicationRequest=='Completed'){
     JobApplicationData.find({status:req.params.applicationRequest}).exec(function(err,data){
              if(err) { console.log('server error in get'+err); }
              else{

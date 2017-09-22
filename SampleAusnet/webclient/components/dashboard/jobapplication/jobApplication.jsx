@@ -16,7 +16,7 @@ return (
     <div>
       <JobDetail  jobDetailArr={this.props.jobDetailArr}/>
 <Divider horizontal>-</Divider>
-      <JobProgress jobDetailArr={this.props.jobDetailArr.JobProgress}/>
+      <JobProgress jobDetailArr={this.props.jobDetailArr}/>
     </div>
   );
 }

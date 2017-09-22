@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form,Divider,List,Button} from 'semantic-ui-react';
 import JobProgressChild from './JobProgressChild';
-export default class JobDetail extends React.Component {
+export default class JobProgress extends React.Component {
 
 
 render () {
@@ -19,7 +19,7 @@ return (
 					<p>{data.time}</p>
 					</div>
 				})} */}
-			<JobProgressChild data={this.props.jobDetailArr}/>
+			<JobProgressChild data={this.props.jobDetailArr.JobProgress}/>
     </div>
   );
 }

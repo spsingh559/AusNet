@@ -1,46 +1,41 @@
 import React from 'react';
 import {Form,Divider,List,Button} from 'semantic-ui-react';
+import EachupcomingData from './EachupcomingData';
 export default class UpcomingJobs extends React.Component {
 
-	constructor() {
-    super();
-    this.state = {
-    appno:''
-  };
+
+ // handleClick = (e,{value}) =>
+ // {
+ //  	console.log (value);
+ //   this.props.getAppNoDetails(value);
+ // }
+
+getAppNoDetails=(applicationID)=>{
+	this.props.getAppNoDetails(applicationID);
 }
- handleClick = (e,{value}) =>
- {
-	//  alert('we clciked');
-	 console.log (value);
-	//  this.state.appno=value ;
-	//  this.setState({ appno:this.state.appno});
-	//  console.log(this.state.appno);
-	  this.props.getAppNoDetails(value);
- }
-
-
 	render () {
+		console.log('upcoming component loaded');
   console.log(this.props.upcomingArr);
   let arr=[];
-  this.props.upcomingArr.forEach((data,i)=>{
-		arr.push(<div key={i}>
-			
-			<List >
-			<List.Item value={data.applicationID} onClick={this.handleClick} >
-
-					<List.Header as='a' >Application number:{data.applicationID }</List.Header>
-					<List.Description as='a' >Status:{data.status }</List.Description>
-					<br></br>
-			</List.Item>
-		</List>
-		</div>);
-
+  let upacomingData=this.props.upcomingArr.map((data,i)=>{
+		return(
+		<div key={i}>
+		<EachupcomingData
+			applicationID={data.applicationID}
+			status={data.status}
+			index={i}
+			getAppNoDetails={this.getAppNoDetails}
+			>
+			</EachupcomingData>
+		</div>
+	)
   })
 		return (
 
       <div>
  <Divider horizontal>{this.props.jobState}</Divider>
-{arr}
+ {upacomingData}
+
       </div>
     );
   }
