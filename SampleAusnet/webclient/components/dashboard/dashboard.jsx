@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Container,Grid} from 'semantic-ui-react';
+import {Button,Container,Grid,Search} from 'semantic-ui-react';
 import AusnetServices from './ausnetservices/ausnetservices.jsx';
 import JobList from './joblists/joblist.jsx';
 import OngoingJobs from './joblists/ongoingJobs.jsx';
@@ -195,34 +195,27 @@ componentDidMount()
 	render () {
 
 		return (
-			<div >
+<Grid columns={3} divided >
+     <Grid.Row stretched>
+         <Grid.Column width={3} style={{background:'#CFE2F5 '}}>
+             <AusnetServices handleJobStages={this.handleJobStages} upcomingArrlen={this.state.upcomingArrlen} ongoingArrlen={this.state.ongoingArrlen} completedArrlen={this.state.completedArrlen} Alllength={this.state.Alllength}/>
+             <br></br>
+         <Button  style={{marginLeft:'10',color:'#fff',backgroundColor:'#057EF7 '}}>Dialer</Button>
+         </Grid.Column>
 
+         <Grid.Column width={3} style={{background:'#ECE9E9 '}}>
+						<input type="text" placeholder="Search Jobs Here" style={{icon: 'search', iconPosition: 'left',width:'100%',height:30}} />
+            {this.jobFilter(this.state.jobState)}
 
- <Grid columns={3} divided >
-	 <Grid.Row stretched>
-		 <Grid.Column width={4} style={{background:'#ABEBC6'}}>
-			 <AusnetServices handleJobStages={this.handleJobStages} upcomingArrlen={this.state.upcomingArrlen} ongoingArrlen={this.state.ongoingArrlen} completedArrlen={this.state.completedArrlen} Alllength={this.state.Alllength}/>
-			 <br></br>
-			  <br></br>
-				 <br></br>
-		 <Button color='teal'>dialer</Button>
-		 </Grid.Column>
+         </Grid.Column>
 
-		 <Grid.Column width={4} style={{background:'#D5F5E3'}}>
-			{this.jobFilter(this.state.jobState)}
-
-		 </Grid.Column>
-
-		 <Grid.Column width={8} style={{background:'#EAFAF1'}}>
+         <Grid.Column width={10} style={{background:'#fff'}}>
 <JobApplication  jobDetailArr={this.state.jobDetailArr}/>
 
 
-		 </Grid.Column>
-	 </Grid.Row>
- </Grid>
-
-
-</div>
+         </Grid.Column>
+     </Grid.Row>
+</Grid>
 
 
 		);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Divider} from 'semantic-ui-react';
+import {Form, Divider,Search} from 'semantic-ui-react';
 import OngoingJobs from './ongoingJobs.jsx';
 import UpcomingJobs from './upcomingJobs.jsx';
 import CompletedJobs from './completedJobs.jsx';
@@ -18,7 +18,7 @@ export default class JobList extends React.Component {
 
 		return (
 			<div >
-
+      
       <UpcomingJobs upcomingArr={this.props.upcomingArr} jobState={this.state.data} getAppNoDetails={this.props.getAppNoDetails}/>
 
       <OngoingJobs ongoingArr={this.props.ongoingArr} jobState={this.state.data1} getAppNoDetails={this.props.getAppNoDetails}/>

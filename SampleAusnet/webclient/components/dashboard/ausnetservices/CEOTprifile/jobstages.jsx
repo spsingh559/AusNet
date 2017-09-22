@@ -12,9 +12,9 @@ export default class JobStages extends React.Component {
 
 	render () {
 		return (
-        <Form>
-       <Form.Field>
-        JOBS <b>{this.state.value}</b>
+        <Form style={{marginLeft:10}}>
+       <Form.Field style={{fontWeight:'bold',marginLeft:10}}>
+        Jobs <b>{this.state.value}</b>
        </Form.Field>
        <Form.Field>
          <Radio

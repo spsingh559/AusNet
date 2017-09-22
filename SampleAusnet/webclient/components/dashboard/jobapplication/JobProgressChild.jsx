@@ -33,10 +33,10 @@ export default class JobProgressChild extends React.Component {
       // console.log(i);
 
       if(i<=4){
-      arr.push(<Step key={i}><StepLabel>{data.name.slice(0, 7)} <br /> {data.time}</StepLabel></Step>);
+      arr.push(<Step key={i}><StepLabel>{data.name.slice(0, 15)} <br /> {data.time}</StepLabel></Step>);
     }else{
 
-    arr1.push(<Step key={i}><StepLabel>{data.name.slice(0, 7)} <br /> {data.time}</StepLabel></Step>);
+    arr1.push(<Step key={i}><StepLabel>{data.name.slice(0, 15)} <br /> {data.time}</StepLabel></Step>);
     }
     if(data.status==true){
       count++;

@@ -21,26 +21,29 @@ export default class OngoingJobs extends React.Component {
   let arr=[];
   this.props.ongoingArr.forEach((data,i)=>{
 		arr.push(<div key={i}>
-			
+
 			<List >
-			<List.Item value={data.applicationID} onClick={this.handleClick} >
+            <List.Item value={data.applicationID} onClick={this.handleClick} >
 
-					<List.Header as='a' >Application number:{data.applicationID }</List.Header>
-					<List.Description as='a' >Status:{data.status }</List.Description>
-					<br></br>
+                    <List.Description as='a' >
+                    Application number:{data.applicationID }<br />
+                    Status:{data.status }</List.Description>
+                    <hr />
+            </List.Item>
 
-			</List.Item>
-
-		</List>
+        </List>
 		</div>);
   })
 		return (
 
-      <div>
-         <Divider horizontal>{this.props.jobState}</Divider>
-        {arr}
-
-      </div>
+			<div>
+	            <div style={{fontWeight:'bold',color:'#05A1DC ',height:30,backgroundColor:'#DCDCDC ',paddingTop:5}}>
+	                {this.props.jobState}
+	            </div>
+	            <div>
+	                {arr}
+	            </div>
+	        </div>
     );
   }
 }

@@ -15,12 +15,14 @@ export default class EachupcomingData extends React.Component{
     console.log('hey i am in EachupcomingData comp----------------------------');
     if(this.props.index==0){
       return(
+
         <List style={{backgroundColor:'white'}}>
   			<List.Item  onClick={this.handleClick} >
 
-  					<List.Header as='a' >Application No:{this.props.applicationID }</List.Header>
-  					<List.Description as='a' >Status:{this.props.status }</List.Description>
-  					<br></br>
+          <List.Description as='a' >
+          Application Number:{this.props.applicationID }<br />
+          Status:{this.props.status }</List.Description>
+          <hr />
   			</List.Item>
   		</List>
       )
@@ -29,9 +31,10 @@ export default class EachupcomingData extends React.Component{
         <List style={{backgroundColor:this.state.backgroundStyle}}>
   			<List.Item  onClick={this.handleClick} >
 
-  					<List.Header as='a' >Application No:{this.props.applicationID }</List.Header>
-  					<List.Description as='a' >Status:{this.props.status }</List.Description>
-  					<br></br>
+          <List.Description as='a' >
+          Application Number:{this.props.applicationID }<br />
+          Status:{this.props.status }</List.Description>
+          <hr />
   			</List.Item>
   		</List>
       )

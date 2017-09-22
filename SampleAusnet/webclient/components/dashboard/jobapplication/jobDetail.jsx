@@ -1,5 +1,5 @@
 import React from 'react';
-import {Divider,Button,Card,Image} from 'semantic-ui-react';
+import {Divider,Button,Card,Image,Grid} from 'semantic-ui-react';
 import Axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 export default class JobDetail extends React.Component {
@@ -59,63 +59,101 @@ render () {
     case 'NotStarted':  buttonStatus=null;
                           cardStatus=null;
       break;
-    case 'Awaiting Approval':buttonStatus=[<RaisedButton label="Approve Job" onTouchTap={this.sendApproveMsg} primary={true}  />]
+    case 'Awaiting Approval':buttonStatus=[<Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#057EF7 '}} onClick={this.sendApproveMsg} >Approve</Button>  ]
                               cardStatus=null;
     break;
-    case 'Ongoing':buttonStatus=[<RaisedButton label="Pause Job" onTouchTap={this.pauseJob} secondary={true}  />]
+    case 'Ongoing':buttonStatus=[<Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#FB4545'}} onClick={this.pauseJob} >Pause Job</Button>]
                   this.props.jobDetailArr.JobProgress.forEach((data)=>{
                     if(data.stepID==5 && data.status==true){
-                      cardStatus=[<Card><Image src='../images/permit Image.JPG' /> </Card>]
+                      cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {this.props.jobDetailArr.permitNumber}</div>]
                     }
                   })
     break;
     case 'Completed':buttonStatus=null;
-                      cardStatus=[<Card><Image src='../images/permit Image.JPG' /> </Card>]
+                      cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {this.props.jobDetailArr.permitNumber}</div>]
     default:
 
   }
 return (
+  <Grid columns={3} >
+     <Grid.Row style={{marginTop:20,textAlign:'center',marginLeft:380,fontWeight:'bold'}}>
+       Application {this.props.jobDetailArr.applicationID}
+     </Grid.Row>
 
-    <div>
-      <Divider horizontal>Application {this.props.jobDetailArr.applicationID}</Divider>
-      <Card.Group itemsPerRow={3} >
-  <Card>
-    <Card.Content>
-      <Card.Header>
-        Operating Auth. No:{this.props.jobDetailArr.operatingAuthNo}<br/>
-      </Card.Header>
+       <Grid.Row stretched>
+         <Grid.Column width={6} style={{marginLeft:20}}>
+           Operating Auth. No:<br/>{this.props.jobDetailArr.operatingAuthNo}<br/>
+           Location:<br/>{this.props.jobDetailArr.location}<br /><br />
+           Scheduled Start time:<br/>{this.props.jobDetailArr.startTime}<br /><br />
+           Scheduled Interruption time:<br/>{this.props.jobDetailArr.scheduledInterruptionTime}<br /><br />
+           Status: <br />{this.props.jobDetailArr.status}<br />
+           <div style={{marginTop:'40'}}>
+             {buttonStatus}
+           </div>
+         </Grid.Column>
+         <Grid.Column width={6}>
+           <Image src='http://www.freeiconspng.com/uploads/male-icon-4.jpg'  centered shape='circular'
+                  style={{width:'65px',height:'35px',borderRadius:70,border:'0.5px solid grey',marginLeft:0,marginTop:0}}/>
+           <p>
+             <span style={{fontWeight:'bold'}}>Operator</span><br />
+             <span>{this.props.jobDetailArr.operatorName}</span>
+           </p>
+           <Image src='http://www.freeiconspng.com/uploads/male-icon-4.jpg'  centered shape='circular'
+                  style={{width:'65px',height:'35px',borderRadius:70,border:'0.5px solid grey',marginLeft:0,marginTop:0}}/>
+           <p>
+             <span style={{fontWeight:'bold'}}>Recipient</span><br />
+             <span>{this.props.jobDetailArr.recepientName}</span>
+           </p>
+           {/* <div>
+             <Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#5D5D5D '}}  disabled={true}>Call</Button>
+           </div> */}
+        </Grid.Column>
+        <Grid.Column width={3}>
+          {cardStatus}
+        </Grid.Column>
+     </Grid.Row>
+   </Grid>
 
-      <Card.Description>
-      <b>  Location:</b>{this.props.jobDetailArr.location}<br/>
-        <b>Scheduled Start time</b><br/>{this.props.jobDetailArr.startTime}<br/>
-      <b>  Scheduled Interruption time</b><br/>{this.props.jobDetailArr.scheduledInterruptionTime}<br />
-      <b>  Status:</b> {this.props.jobDetailArr.status}<br/>
-      </Card.Description>
-
-        <div>
-          {buttonStatus }
-
-        </div>
-      </Card.Content>
-
-  </Card>
-  <Card>
-    <Card.Content>
-      <Card.Header>
-       <Image  centered size='mini' src='http://icons.iconarchive.com/icons/paomedia/small-n-flat/512/user-male-icon.png'  shape='circular' style={{width:'100px',height:'75px'}}/><br/>
-      </Card.Header>
-      <Card.Meta>
-          operatorName:<br/> {this.props.jobDetailArr.operatorName}<br/><br/>
-      </Card.Meta>
-      <Card.Description>
-    <Image  centered size='mini' src='https://d30y9cdsu7xlg0.cloudfront.net/png/17241-200.png'  shape='circular' style={{width:'100px',height:'75px'}}/><br/>
-    RecipientName:<br/> {this.props.jobDetailArr.recepientName}
-      </Card.Description>
-    </Card.Content>
-  </Card>
-  {cardStatus}
-</Card.Group>
-    </div>
+//     <div>
+//       <Divider horizontal>Application {this.props.jobDetailArr.applicationID}</Divider>
+//       <Card.Group itemsPerRow={3} >
+//   <Card>
+//     <Card.Content>
+//       <Card.Header>
+//         Operating Auth. No:{this.props.jobDetailArr.operatingAuthNo}<br/>
+//       </Card.Header>
+//
+//       <Card.Description>
+//       <b>  Location:</b>{this.props.jobDetailArr.location}<br/>
+//         <b>Scheduled Start time</b><br/>{this.props.jobDetailArr.startTime}<br/>
+//       <b>  Scheduled Interruption time</b><br/>{this.props.jobDetailArr.scheduledInterruptionTime}<br />
+//       <b>  Status:</b> {this.props.jobDetailArr.status}<br/>
+//       </Card.Description>
+//
+//         <div>
+//           {buttonStatus }
+//
+//         </div>
+//       </Card.Content>
+//
+//   </Card>
+//   <Card>
+//     <Card.Content>
+//       <Card.Header>
+//        <Image  centered size='mini' src='http://icons.iconarchive.com/icons/paomedia/small-n-flat/512/user-male-icon.png'  shape='circular' style={{width:'100px',height:'75px'}}/><br/>
+//       </Card.Header>
+//       <Card.Meta>
+//           operatorName:<br/> {this.props.jobDetailArr.operatorName}<br/><br/>
+//       </Card.Meta>
+//       <Card.Description>
+//     <Image  centered size='mini' src='https://d30y9cdsu7xlg0.cloudfront.net/png/17241-200.png'  shape='circular' style={{width:'100px',height:'75px'}}/><br/>
+//     RecipientName:<br/> {this.props.jobDetailArr.recepientName}
+//       </Card.Description>
+//     </Card.Content>
+//   </Card>
+//   {cardStatus}
+// </Card.Group>
+//     </div>
   );
 }
 }
