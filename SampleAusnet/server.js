@@ -37,15 +37,15 @@ io.on('connection',function(socket){
 // const redis = require('redis');
 var redisClient = redis.createClient({host:'127.0.0.1',port:6379});
 
-  redisClient.subscribe('ApprovalChanel');
-  redisClient.subscribe('InitiateJobRequestRedis');
+  // redisClient.subscribe('ApprovalChanel');
+  redisClient.subscribe('InitiateJobRequestRedisV1');
   console.log('subscribe here');
   redisClient.on('message', (channel, message) => {
  console.log('-----------subscribe get data----------');
  // io.emit('approvalConfirmation', {data:message});
  console.log(message);
- if(channel=='InitiateJobRequestRedis'){
-    io.emit('initiateJObSocketWeb', message);
+ if(channel=='InitiateJobRequestRedisV1'){
+    io.emit('initiateJobSocketWeb', message);
  }
 });
 
@@ -62,7 +62,7 @@ socket.on('approvalNotification', function(msg){
   console.log('publish here');
 
   var publishClient = redis.createClient({host:'127.0.0.1',port:6379});
-  publishClient.publish('ApprovalChanel', 'Your Job has been approved');
+  publishClient.publish('ApprovalChanelV1', 'Your Job has been approved');
   // io.emit('approvalConfirmation', {data:confirmationData});
 });
 

@@ -10,11 +10,14 @@ export default class JobApplication extends React.Component {
 
   };
 }
+approvalData=(obj)=>{
+	this.props.approvalData(obj);
+}
 render () {
 return (
 
     <div>
-      <JobDetail  jobDetailArr={this.props.jobDetailArr}/>
+      <JobDetail  jobDetailArr={this.props.jobDetailArr} approvalData={this.approvalData}/>
 <Divider horizontal>-</Divider>
       <JobProgress jobDetailArr={this.props.jobDetailArr}/>
     </div>

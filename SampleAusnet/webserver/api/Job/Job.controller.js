@@ -64,6 +64,56 @@ var JobApplicationData=require('./Job.Model');
 // }
 // ];
 
+// controller.getAppNoDetails=function(req,res){
+//   console.log('-------------api connected for get each application data-----------');
+//   console.log(req.params);
+// }
+controller.patchoperatorData=function(req,res){
+  console.log('api connected for patch operation');
+console.log('req rec for job progress');
+console.log(req.body.JobProgress);
+if(req.body.requestType=='InitiateJobRequest'){
+  JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
+                                    {$set:{
+                                     operatorName:req.body.operatorName,
+                                     operatorContactNumber:req.body.operatorContactNumber,
+                                     recepientName:req.body.recepientName,
+                                     recepientContactNumber:req.body.recepientContactNumber,
+                                     operatingAuthNo:req.body.operatingAuthNo,
+                                     applicationActiveStatus:req.body.applicationActiveStatus,
+                                     JobProgress:req.body.JobProgress
+                    }},function(err, data){
+                      if(err) { console.log('server error in get'+err); }
+                      else{
+                        console.log('result of patch operation');
+                        console.log(data);
+                        // console.log(data);
+                        // console.log(data);
+                       res.json({message:data});
+                     };
+
+    });
+  }
+  else if(req.body.requestType=='CEOTApproval'){
+    JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
+                                      {$set:{
+                                       status:req.body.status,
+                                       applicationActiveStatus:req.body.applicationActiveStatus,
+                                       JobProgress:req.body.JobProgress
+                      }},function(err, data){
+                        if(err) { console.log('server error in get'+err); }
+                        else{
+                          console.log('result of patch operation');
+                          console.log(data);
+                          // console.log(data);
+                          // console.log(data);
+                         res.json({message:data});
+                       };
+  });
+
+  }
+}
+
 controller.getJobData=function(req,res){
 
   console.log('api connected for get for all application');
@@ -113,7 +163,7 @@ controller.getFilterData=function(req,res){
  //  // console.log(req.params.ApplicantNumber);
  // let arr=[];
   // console.log(req.params.applicationRequest);
-  console.log('api connected for each application data');
+  console.log('api connected for status based application data');
   // var par=req.params.applicationRequest;
   console.log(req.params);
   console.log(req.params.applicationRequest);

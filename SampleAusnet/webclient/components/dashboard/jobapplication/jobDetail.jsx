@@ -17,36 +17,58 @@ export default class JobDetail extends React.Component {
         socket:React.PropTypes.object.isRequired
       }
     }
-
+    componentDidMount=()=>{
+      this.context.socket.on('initiateJobSocketWeb',(msg)=>{
+        console.log(msg);
+        console.log('socket initiated here-------------------');
+      alert('i hc recv message');
+      });
+    }
 sendApproveMsg=()=>{
-let approvalData={
+  let today = new Date();
+		let time = today.getHours() + ":" + today.getMinutes();
+let approvalMsg={
   initialMessage:'Job has approved by CEOT',
   ApplicantNumber:this.props.jobDetailArr.applicationID
 }
-
-   this.context.socket.emit('approvalNotification',{data:approvalData });
-  //let data1='approved';
-  // Axios({
-  //     method:'get',
-  //         url:'/approve',
-  // }).then(function (data) {
-  //   console.log(data);
-  //
-  // }.bind(this))
-  // .catch(function (error) {
-  //   console.log(error+"error in jobDetail for status");
-  // });
+   this.context.socket.emit('approvalNotification',{data:approvalMsg });
+   let stepObj={};
+   this.props.jobDetailArr.JobProgress.forEach((data)=>{
+     if(data.stepID==1){
+       stepObj=data;
+     }
+   });
+   console.log('step id 1 is');
+   console.log(stepObj);
+   let obj={
+      requestType:'CEOTApproval',
+			applicationID:this.props.jobDetailArr.applicationID,
+      status:'Ongoing',
+			applicationActiveStatus:false,
+			JobProgress:[stepObj,
+        {   stepID:2,   name:'CEOT Approval',      time:time,      status:true   	 },
+        {      stepID:3, name:'Interuption Time Started',      time:'N/A',      status:false    	 },
+				{ stepID:4,     name:'Isolation and Earthing Done',     time:'N/A',      status:false 	 },
+				{   stepID:5,   name:'Issue Permit',      time:'N/A',      status:false   	 },
+				{     stepID:6, name:'Work Started',     time:'N/A',      status:false  	 },
+				{  stepID:7,  name:'Work Completed',    time:'N/A',      status:false    	 },
+				{ stepID:8,     name:'Cancel Permit',     time:'N/A',      status:false  	 },
+				{ stepID:9,     name:'Isolation and Earthing Removed',     time:'N/A',      status:false  	 },
+				{ stepID:10,  name:'Interruption Time Ended',     time:'N/A',      status:false }
+      ]
 }
-componentDidMount=()=>{
-  this.context.socket.on('initiateJObSocketWeb', (msg) => {
-    this.setState({initiateJobStatus:true});
-    // alert(msg);
-      // alert(msg.data);
-      // this.setState({chatmessage:msg.data});
-        // console.log('Queued');
-        // this.setState({openDialogue: msg.status,dialogueMessage:msg.message});
-      });
-}
+this.props.approvalData(obj);
+// componentDidMount=()=>{
+//   this.context.socket.on('initiateJobSocketWeb', (msg) => {
+//
+//     // this.setState({initiateJobStatus:true});
+//     // alert(msg);
+//       // alert(msg.data);
+//       // this.setState({chatmessage:msg.data});
+//         // console.log('Queued');
+//         // this.setState({openDialogue: msg.status,dialogueMessage:msg.message});
+//       });
+  }
 
 pauseJob=()=>{
   alert('request sent to operator');
@@ -55,14 +77,17 @@ pauseJob=()=>{
 render () {
   let buttonStatus;
   let cardStatus=null;
+  let status;
   switch (this.props.jobDetailArr.status) {
-    case 'NotStarted':  buttonStatus=null;
-                          cardStatus=null;
+    case 'NotStarted':if(this.props.jobDetailArr.applicationActiveStatus==false){ buttonStatus=null;   cardStatus=null; status='Not Started';}
+                      else{
+                        buttonStatus=  [<Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#057EF7 '}} onClick={this.sendApproveMsg} >Approve</Button>  ]
+                            cardStatus=null;
+                            status='Awaiting Approval'
+                          }
       break;
-    case 'Awaiting Approval':buttonStatus=[<Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#057EF7 '}} onClick={this.sendApproveMsg} >Approve</Button>  ]
-                              cardStatus=null;
-    break;
     case 'Ongoing':buttonStatus=[<Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#FB4545'}} onClick={this.pauseJob} >Pause Job</Button>]
+                    status='Ongoing'
                   this.props.jobDetailArr.JobProgress.forEach((data)=>{
                     if(data.stepID==5 && data.status==true){
                       cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {this.props.jobDetailArr.permitNumber}</div>]
@@ -70,6 +95,7 @@ render () {
                   })
     break;
     case 'Completed':buttonStatus=null;
+                      status='Completed';
                       cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {this.props.jobDetailArr.permitNumber}</div>]
     default:
 
@@ -86,7 +112,7 @@ return (
            Location:<br/>{this.props.jobDetailArr.location}<br /><br />
            Scheduled Start time:<br/>{this.props.jobDetailArr.startTime}<br /><br />
            Scheduled Interruption time:<br/>{this.props.jobDetailArr.scheduledInterruptionTime}<br /><br />
-           Status: <br />{this.props.jobDetailArr.status}<br />
+           Status: <br />{status}<br />
            <div style={{marginTop:'40'}}>
              {buttonStatus}
            </div>

@@ -21,7 +21,8 @@ export default class EachupcomingData extends React.Component{
 
           <List.Description as='a' >
           Application Number:{this.props.applicationID }<br />
-          Status:{this.props.status }</List.Description>
+          Status: {this.props.applicationActiveStatus?'Awaiting Approval':'Not Started' }
+        </List.Description>
           <hr />
   			</List.Item>
   		</List>
@@ -33,7 +34,7 @@ export default class EachupcomingData extends React.Component{
 
           <List.Description as='a' >
           Application Number:{this.props.applicationID }<br />
-          Status:{this.props.status }</List.Description>
+          Status:{this.props.applicationActiveStatus?'Awaiting Approval':'Not Started' }</List.Description>
           <hr />
   			</List.Item>
   		</List>

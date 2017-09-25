@@ -4,9 +4,12 @@ console.log('new update');
  const jobController = require('./Job.controller.js');
 // // router.post('/',roleSettingController.createRole);
 
-router.get('/',jobController.getJobData);
-router.get('/:applicationRequest', jobController.getFilterData);
 
+
+// router.get('/:requestType/:applicationID', jobController.getAppNoDetails);
+router.get('/:applicationRequest', jobController.getFilterData);
+router.get('/',jobController.getJobData);
+router.patch('/',jobController.patchoperatorData);
 //router.get('/:data',jobController.publishMsg);
 
 // router.get('app/:ApplicantNumber', jobController.getApplicationData);

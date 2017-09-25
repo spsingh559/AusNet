@@ -109,10 +109,10 @@ getjobDetails=()=>{
 //get job state from child Component
 handleJobStages=(data)=>
 {
- this.state.jobState=data;
- this.setState({jobState:this.state.jobState});
+ // this.state.jobState=data;
+ this.setState({jobState:data});
 
-	if(this.state.jobState=='ALL')
+	if(data=='ALL')
 	{
 		this.getjobDetails();
 	}
@@ -184,13 +184,80 @@ else  {
 }
 }
 
+static get contextTypes() {
+		return {
+			socket:React.PropTypes.object.isRequired
+		}
+	}
+
+
+	// componentDidMount=()=>{
+	// 	this.context.socket.on('initiateJobSocketWeb',(msg)=>{
+	// 		console.log(msg);
+	// 		console.log('socket initiated here-------------------');
+	// 	alert('i hc recv message');
+	// 	});
+	// }
+
 //to get no. of jobs and to render the upcoming jobs when loaded initially
-componentDidMount()
+componentWillMount=()=>
 {
 	this.getNumberOfJobs();
-	this.state.jobState='NotStarted';
-	this.setState({jobState:this.state.jobState});
-		this.handleJobFilter(this.state.jobState);
+	let jobstatus='NotStarted';
+	this.setState({jobState:jobstatus});
+		this.handleJobFilter(jobstatus);
+		// this.context.socket.on('initiateJobSocketWeb', (msg) => {
+		// 	console.log(msg);
+		// 	alert('req reached here');
+		// 	// Axios.get('/api/v1/Job/')
+		//   // .then(function (data) {
+		//   //  console.log('data from server is');
+		//   //  console.log(data);
+		//   //  data.data.message.forEach((data)=>{
+		//   // 	 if(data.applicationID==msg.applicationID){
+		//   // 		 //set the state here for individual application number -------------- later we ll do server side api for each application number
+		//   // 		 this.setState({jobDetailArr:data});
+		//   // 	 }
+		//   //  })
+		//   // }.bind(this))
+		//   // .catch(function (error) {
+		//   //  console.log(error+"error in jobDetail for status");
+		//   // });
+		// 		});
+}
+approvalData=(obj)=>{
+	let currentOngoingData=this.state.ongoingArr;
+	let currentUpcomingArr=this.state.upcomingArr;
+	let currentJobData=this.state.jobData;
+	Axios({
+  method: 'patch',
+  url: '/api/v1/Job/',
+  data: obj
+})
+.then(function (data) {
+  console.log('response from server');
+	data.data.message.applicationActiveStatus=obj.applicationActiveStatus;
+	data.data.message.status=obj.status;
+	data.data.message.JobProgress=obj.JobProgress;
+	let newdata=[data.data.message].concat(currentOngoingData);
+	currentUpcomingArr.forEach((data,i)=>{
+		if(data.applicationID==obj.applicationID){
+			var editData=currentUpcomingArr.splice(i,1);
+          editData=null;
+		}
+	})
+	currentJobData.forEach((data,i)=>{
+		if(data.applicationID==obj.applicationID){
+			var editData=currentJobData.splice(i,1);
+          editData=null;
+		}
+	})
+	this.setState({ongoingArr:newdata,upcomingArr:currentUpcomingArr,jobData:currentJobData,jobDetailArr:this.state.jobData[0]});
+
+}.bind(this))
+.catch(function (error) {
+  console.log(error+"error in jobDetail for status");
+});
 }
 	render () {
 
@@ -210,7 +277,7 @@ componentDidMount()
          </Grid.Column>
 
          <Grid.Column width={10} style={{background:'#fff'}}>
-<JobApplication  jobDetailArr={this.state.jobDetailArr}/>
+<JobApplication  jobDetailArr={this.state.jobDetailArr} approvalData={this.approvalData}/>
 
 
          </Grid.Column>

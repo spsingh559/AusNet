@@ -23,6 +23,7 @@ getAppNoDetails=(applicationID)=>{
 		<EachupcomingData
 			applicationID={data.applicationID}
 			status={data.status}
+			applicationActiveStatus={data.applicationActiveStatus}
 			index={i}
 			getAppNoDetails={this.getAppNoDetails}
 			>

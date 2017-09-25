@@ -10,6 +10,7 @@ var jobApplicationSchema = new mongoose.Schema({
     startTime:String,
     endTime:String,
     status:String,
+    applicationActiveStatus:Boolean,
     operatorName:String,
     operatorContactNumber:String,
     recepientName:String,
@@ -17,7 +18,7 @@ var jobApplicationSchema = new mongoose.Schema({
     scheduledInterruptionTime:String,
     permitNumber:Number,
     JobProgress:[{
-      stepId:Number,
+      stepID:Number,
       name:String,
       time:String,
       status:Boolean
