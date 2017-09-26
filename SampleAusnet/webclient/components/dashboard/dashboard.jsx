@@ -191,13 +191,54 @@ static get contextTypes() {
 	}
 
 
-	// componentDidMount=()=>{
-	// 	this.context.socket.on('initiateJobSocketWeb',(msg)=>{
-	// 		console.log(msg);
-	// 		console.log('socket initiated here-------------------');
-	// 	alert('i hc recv message');
-	// 	});
-	// }
+	componentDidMount=()=>{
+		this.context.socket.on('initiateJobSocketWeb',(msg)=>{
+
+			console.log('socket initiated here-------------------');
+				console.log(msg);
+				// console.log('obj after assign value is');
+				// console.log(newObj);
+				let currentJobData=this.state.jobData;
+				let currentUpcomingArr =this.state.upcomingArr;
+			console.log('current upcoming data is');
+			console.log(currentUpcomingArr);
+				// console.log(currentUpcomingArr);
+				Axios.get('/api/v1/Job/')
+				.then(function (data) {
+				 console.log('data from server is');
+				 console.log(data);
+				 data.data.message.forEach((data)=>{
+					if(data.applicationID==msg){
+						console.log(data);
+						currentJobData.forEach((datas,i)=>{
+							if(datas.applicationID==data.applicationID){
+						 var editData=currentJobData.splice(i,1,data);
+						 editData=null;
+							}
+						})
+
+						// for all  jobs
+						currentUpcomingArr.forEach((datas,i)=>{
+							if(datas.applicationID==data.applicationID){
+						 var editDataupcoming=currentUpcomingArr.splice(i,1,data);
+						 editDataupcoming=null;
+							}
+						})
+
+						console.log('currentUpcomingArr after initiate job is');
+						console.log(currentUpcomingArr);
+						//set the state here for individual application number -------------- later we ll do server side api for each application number
+						 this.setState({jobDetailArr:data,jobData:currentJobData,upcomingArr:currentUpcomingArr});
+					}
+				 })
+				}.bind(this))
+				.catch(function (error) {
+				 console.log(error+"error in jobDetail for status");
+				});
+
+		// alert('i hc recv message');
+		});
+	}
 
 //to get no. of jobs and to render the upcoming jobs when loaded initially
 componentWillMount=()=>
@@ -263,7 +304,7 @@ approvalData=(obj)=>{
 
 		return (
 <Grid columns={3} divided >
-     <Grid.Row stretched>
+     <Grid.Row>
          <Grid.Column width={3} style={{background:'#CFE2F5 '}}>
              <AusnetServices handleJobStages={this.handleJobStages} upcomingArrlen={this.state.upcomingArrlen} ongoingArrlen={this.state.ongoingArrlen} completedArrlen={this.state.completedArrlen} Alllength={this.state.Alllength}/>
              <br></br>

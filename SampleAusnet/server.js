@@ -31,21 +31,37 @@ app.use(webpackHotMiddleware(compiler));
 var server = http.createServer(app);
 //socket Part started
 
+
 var io = require('socket.io').listen(server);
 io.on('connection',function(socket){
   console.log('SOCKET CONNECTED');
+  var redisClient = redis.createClient({host:'127.0.0.1',port:6379});
+  var publishClient = redis.createClient({host:'127.0.0.1',port:6379});
 // const redis = require('redis');
-var redisClient = redis.createClient({host:'127.0.0.1',port:6379});
+// var redisClient = redis.createClient({host:'127.0.0.1',port:6379});
 
   // redisClient.subscribe('ApprovalChanel');
   redisClient.subscribe('InitiateJobRequestRedisV1');
+  redisClient.subscribe('InitiateJobNotificationRedis');
   console.log('subscribe here');
   redisClient.on('message', (channel, message) => {
  console.log('-----------subscribe get data----------');
  // io.emit('approvalConfirmation', {data:message});
- console.log(message);
+  // console.log(message.data);
  if(channel=='InitiateJobRequestRedisV1'){
+   console.log('message received is');
+   console.log( message);
+  //  console.log(message.data);
+  //  console.log(message.msg.data);
+  // var da= JSON.parse(message.data)
+  // console.log(da);
+  // console.log(message.data);
+  //  console.log(message);
     io.emit('initiateJobSocketWeb', message);
+ }else if(channel=='InitiateJobNotificationRedis'){
+   console.log('message recv for notification');
+   console.log(message);
+     io.emit('InitiateJobNotificationWeb', message);
  }
 });
 
@@ -61,7 +77,7 @@ socket.on('approvalNotification', function(msg){
   };
   console.log('publish here');
 
-  var publishClient = redis.createClient({host:'127.0.0.1',port:6379});
+  // var publishClient = redis.createClient({host:'127.0.0.1',port:6379});
   publishClient.publish('ApprovalChanelV1', 'Your Job has been approved');
   // io.emit('approvalConfirmation', {data:confirmationData});
 });

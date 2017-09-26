@@ -8,7 +8,7 @@ export default class JobDetail extends React.Component {
     super();
     this.state = {
       disabled:'true',
-      initiateJobStatus:'',
+      initiateJobStatus:''
   };
 }
 
@@ -17,13 +17,14 @@ export default class JobDetail extends React.Component {
         socket:React.PropTypes.object.isRequired
       }
     }
-    componentDidMount=()=>{
-      this.context.socket.on('initiateJobSocketWeb',(msg)=>{
-        console.log(msg);
-        console.log('socket initiated here-------------------');
-      alert('i hc recv message');
-      });
-    }
+    // componentDidMount=()=>{
+    //   this.context.socket.on('initiateJobSocketWeb',(msg)=>{
+    //     console.log(msg);
+    //     console.log('socket initiated here-------------------');
+    //     this.setState({viewStatus:true});
+    //   // alert('i hc recv message');
+    //   });
+    // }
 sendApproveMsg=()=>{
   let today = new Date();
 		let time = today.getHours() + ":" + today.getMinutes();
@@ -75,7 +76,7 @@ pauseJob=()=>{
 }
 
 render () {
-  let buttonStatus;
+    let buttonStatus;
   let cardStatus=null;
   let status;
   switch (this.props.jobDetailArr.status) {

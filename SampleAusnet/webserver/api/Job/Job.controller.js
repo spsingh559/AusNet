@@ -71,7 +71,7 @@ var JobApplicationData=require('./Job.Model');
 controller.patchoperatorData=function(req,res){
   console.log('api connected for patch operation');
 console.log('req rec for job progress');
-console.log(req.body.JobProgress);
+// console.log(req.body.JobProgress);
 if(req.body.requestType=='InitiateJobRequest'){
   JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
                                     {$set:{
@@ -86,7 +86,7 @@ if(req.body.requestType=='InitiateJobRequest'){
                       if(err) { console.log('server error in get'+err); }
                       else{
                         console.log('result of patch operation');
-                        console.log(data);
+                        // console.log(data);
                         // console.log(data);
                         // console.log(data);
                        res.json({message:data});
@@ -104,7 +104,7 @@ if(req.body.requestType=='InitiateJobRequest'){
                         if(err) { console.log('server error in get'+err); }
                         else{
                           console.log('result of patch operation');
-                          console.log(data);
+                          // console.log(data);
                           // console.log(data);
                           // console.log(data);
                          res.json({message:data});
