@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form,Radio,Label} from 'semantic-ui-react';
+import {Form,Checkbox,Label} from 'semantic-ui-react';
 export default class JobStages extends React.Component {
 
   state = {}
@@ -17,7 +17,7 @@ export default class JobStages extends React.Component {
         Jobs <b>{this.state.value}</b>
        </Form.Field>
        <Form.Field>
-         <Radio
+         <Checkbox
            label='ALL'
            name='radioGroup'
            value='ALL'
@@ -28,7 +28,7 @@ export default class JobStages extends React.Component {
   <Label circular style={{float:'right'}}>{this.props.Alllength}</Label>
        </Form.Field>
        <Form.Field>
-         <Radio
+         <Checkbox
            label='UpcomingJobs'
            name='radioGroup'
            value='NotStarted'
@@ -38,7 +38,7 @@ export default class JobStages extends React.Component {
           <Label circular style={{float:'right'}}>{this.props.upcomingArrlen}</Label>
        </Form.Field>
        <Form.Field>
-         <Radio
+         <Checkbox
            label='OngoingJobs'
            name='radioGroup'
            value='Ongoing'
@@ -48,7 +48,7 @@ export default class JobStages extends React.Component {
           <Label circular style={{float:'right'}}>{this.props.ongoingArrlen}</Label>
        </Form.Field>
        <Form.Field>
-         <Radio
+         <Checkbox
            label='CompletedJobs'
            name='radioGroup'
            value='Completed'

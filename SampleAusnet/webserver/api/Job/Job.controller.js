@@ -111,7 +111,55 @@ if(req.body.requestType=='InitiateJobRequest'){
                        };
   });
 
-  }
+}else if (req.body.requestType=='JobActivity') {
+  console.log('req reach to server for update of JobActivity');
+  console.log(req.body);
+  JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
+                                    {$set:{
+                                     JobProgress:req.body.JobProgress
+                    }},function(err, data){
+                      if(err) { console.log('server error in get'+err); }
+                      else{
+                        console.log('result of patch operation');
+                        // console.log(data);
+                        // console.log(data);
+                        // console.log(data);
+                       res.json({message:data});
+                     };
+});
+// JobApplicationData.find({applicationID:req.body.applicationID}).sort({'stepID':1})
+}else if(req.body.requestType=='JobCompletion'){
+  JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
+                                    {$set:{
+                                     status:req.body.status
+                    }},function(err, data){
+                      if(err) { console.log('server error in get'+err); }
+                      else{
+                        console.log('result of patch operation');
+                        // console.log(data);
+                        // console.log(data);
+                        // console.log(data);
+                       res.json({message:data});
+                     };
+});
+}
+else if(req.body.requestType=='PermitIssued'){
+  JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
+                                    {$set:{
+                                     permitNumber:req.body.permitNumber,
+                                     jobProgress:req.body.jobProgress
+                    }},function(err, data){
+                      if(err) { console.log('server error in get'+err); }
+                      else{
+                        console.log('result of patch operation in permit issue');
+                        // console.log(data);
+                        // console.log(data);
+                        // console.log(data);
+                       res.json({message:data});
+                     };
+                     });
+}
+
 }
 
 controller.getJobData=function(req,res){

@@ -43,25 +43,29 @@ io.on('connection',function(socket){
   // redisClient.subscribe('ApprovalChanel');
   redisClient.subscribe('InitiateJobRequestRedisV1');
   redisClient.subscribe('InitiateJobNotificationRedis');
+  redisClient.subscribe('JobActivityMsgRedis');
+  redisClient.subscribe('JobCompletionMsgRedis');
   console.log('subscribe here');
   redisClient.on('message', (channel, message) => {
  console.log('-----------subscribe get data----------');
  // io.emit('approvalConfirmation', {data:message});
   // console.log(message.data);
  if(channel=='InitiateJobRequestRedisV1'){
-   console.log('message received is');
+   console.log('message received for job initiation');
    console.log( message);
-  //  console.log(message.data);
-  //  console.log(message.msg.data);
-  // var da= JSON.parse(message.data)
-  // console.log(da);
-  // console.log(message.data);
-  //  console.log(message);
     io.emit('initiateJobSocketWeb', message);
  }else if(channel=='InitiateJobNotificationRedis'){
    console.log('message recv for notification');
    console.log(message);
      io.emit('InitiateJobNotificationWeb', message);
+ }else if(channel=='JobActivityMsgRedis'){
+   console.log('message receive for Job Activity');
+   console.log(message);
+   io.emit('JobActivityMsgWeb',message);
+ }else if(channel=='JobCompletionMsgRedis'){
+   console.log('message rcv for Job Completion');{
+     io.emit('JobCompletionMsgWeb',message);
+   }
  }
 });
 
