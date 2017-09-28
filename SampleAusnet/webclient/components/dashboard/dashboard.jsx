@@ -202,6 +202,7 @@ static get contextTypes() {
 
 myFunction=(msg)=>{
   // alert('hi');
+  console.log('my function call after 2 seconds');
   let currentJobData=this.state.jobData;
   let currentUpcomingArr =this.state.upcomingArr;
   let currentAppData=this.state.jobDetailArr;
@@ -216,7 +217,7 @@ console.log(currentUpcomingArr);
     if(data.applicationID==msg){
       console.log(data);
       currentJobData.forEach((datas,i)=>{
-        if(datas.applicationID==data.applicationID){
+        if(datas.applicationID==msg){
        var editData=currentJobData.splice(i,1,data);
        editData=null;
         }
@@ -224,7 +225,7 @@ console.log(currentUpcomingArr);
 
       // for all  jobs
       currentUpcomingArr.forEach((datas,i)=>{
-        if(datas.applicationID==data.applicationID){
+        if(datas.applicationID==msg){
        var editDataupcoming=currentUpcomingArr.splice(i,1,data);
        editDataupcoming=null;
         }
@@ -232,9 +233,11 @@ console.log(currentUpcomingArr);
 
       console.log('currentUpcomingArr after initiate job is');
       console.log(currentUpcomingArr);
+      console.log('current current Job data');
+      console.log(currentJobData);
       //set the state here for individual application number -------------- later we ll do server side api for each application number
        this.setState({jobData:currentJobData,upcomingArr:currentUpcomingArr});
-       if(currentAppData.applicationID==data.applicationID){
+       if(currentAppData.applicationID==msg){
          this.setState({jobDetailArr:data});
        }
     }
@@ -248,7 +251,7 @@ console.log(currentUpcomingArr);
 
 		this.context.socket.on('initiateJobSocketWeb',(msg)=>{
       setTimeout(this.myFunction(msg), 2000);
-			console.log('socket initiated here-------------------');
+			console.log('socket initiated here for JOb Inititation------------------');
 				console.log(msg);
 				// console.log('obj after assign value is');
 				// console.log(newObj);
@@ -286,16 +289,23 @@ console.log(currentUpcomingArr);
       let currentOngoingData=this.state.ongoingArr;
     	let currentCompleted=this.state.completedArr;
       let currentUpcomingArr=this.state.upcomingArr;
+      let currentAppData=this.state.jobDetailArr;
+      let currentJobData=this.state.jobData;
+      // if(currentAppData.status=='Ongoing'){
+      //   this.setState({jobDetailArr:currentOngoingData[0]});
+      // }else{
+      //     this.setState({jobDetailArr:currentUpcomingArr[0]});
+      // }
     	// let currentJobData=this.state.jobData;
       console.log('current state of Checkbox is');
-      console.log(this.state.jobState);
-      if(this.state.jobState=='ALL' || this.state.jobState=='NotStarted'){
-        this.setState({jobDetailArr:currentUpcomingArr[0]});
-      }else if(this.state.jobState=='Ongoing'){
-          this.setState({jobDetailArr:currentOngoingData[0]});
-      }else if(this.state.jobState=='Completed'){
-          this.setState({jobDetailArr:currentCompleted[0]});
-      }
+      // console.log(this.state.jobState);
+      // if(currentAppData.status=='ALL' || this.state.jobState=='NotStarted'){
+      //   this.setState({jobDetailArr:currentUpcomingArr[0]});
+      // }else if(currentAppData.status=='Ongoing'){
+      //     this.setState({jobDetailArr:currentOngoingData[0]});
+      // }else if(currentAppData.status=='Completed'){
+      //     this.setState({jobDetailArr:currentCompleted[0]});
+      // }
 
       Axios.get('/api/v1/Job/')
       .then(function (data) {
@@ -308,8 +318,14 @@ console.log(currentUpcomingArr);
           //    this.setState({jobDetailArr:data});
           //  }
           currentOngoingData.forEach((datas,i)=>{
-        		if(datas.applicationID==data.applicationID){
+        		if(datas.applicationID=msg){
         			var editData=currentOngoingData.splice(i,1);
+                  editData=null;
+        		}
+        	})
+          currentJobData.forEach((data,i)=>{
+        		if(data.applicationID==msg){
+        			var editData=currentJobData.splice(i,1);
                   editData=null;
         		}
         	})
@@ -320,7 +336,8 @@ console.log(currentUpcomingArr);
           //         editData=null;
         	// 	}
         	// })
-        	this.setState({ongoingArr:currentOngoingData,completedArr:newData});
+        	this.setState({ongoingArr:currentOngoingData,completedArr:newData,jobData:currentJobData,jobDetailArr:currentJobData[0]});
+          // this.setState({ongoingArrlen:currentOngoingData.length,completedArrlen:newData.length});
 
         }
        })
@@ -368,7 +385,10 @@ approvalData=(obj)=>{
           editData=null;
 		}
 	})
+  // this.setState({upcomingArrlen:currentUpcomingArr.length,ongoingArrlen:newdata.length});
 	this.setState({ongoingArr:newdata,upcomingArr:currentUpcomingArr,jobData:currentJobData,jobDetailArr:currentJobData[0]});
+  // this.setState({upcomingArrlen:currentUpcomingArr.length,ongoingArrlen:newdata.length});
+
 
 }.bind(this))
 .catch(function (error) {

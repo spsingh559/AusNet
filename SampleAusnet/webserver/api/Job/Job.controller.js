@@ -85,7 +85,7 @@ if(req.body.requestType=='InitiateJobRequest'){
                     }},function(err, data){
                       if(err) { console.log('server error in get'+err); }
                       else{
-                        console.log('result of patch operation');
+                        console.log('result of patch operation in job initiated');
                         // console.log(data);
                         // console.log(data);
                         // console.log(data);
