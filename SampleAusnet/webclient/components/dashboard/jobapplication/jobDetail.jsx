@@ -76,6 +76,9 @@ pauseJob=()=>{
 }
 
 render () {
+  console.log('jobDetail component called');
+  console.log(this.props.jobDetailArr);
+  // console.log(this.props.jobDetailArr.applicationID);
     let buttonStatus;
   let cardStatus=null;
   let status;

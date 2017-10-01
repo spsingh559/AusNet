@@ -1,73 +1,24 @@
 var controller={};
 var JobApplicationData=require('./Job.Model');
 
-// var mainData=[{
-//   OperatingAuthNo:'S10-55745-S2',
-//   ApplicantNumber:'#339525',
-//   Location:'ELECTRONICS CITY',
-//   StartTime:'09/10/17 05:30',
-//   EndTime:'09/10/17 07:30',
-//   status:'OngoingJobs',
-//   operatorName:'Tim',
-//   scheduledInterruptiontime:'06:00 to 07:00'
-// },
-// {
-//   OperatingAuthNo:'S10-55746-S1',
-//   ApplicantNumber:'#339526',
-//   Location:'KOROMANGALA',
-//   StartTime:'09/10/17 08:30',
-//   EndTime:'09/10/17 09:30',
-//   status:'OngoingJobs',
-//   operatorName:'Jack',
-//   scheduledInterruptiontime:'09:00 to 09:30'
-// },
-// {
-//   OperatingAuthNo:'S10-55747-S2',
-//   ApplicantNumber:'#339527',
-//   Location:'SARJAPUR',
-//   StartTime:'09/11/17 06:00',
-//   EndTime:'09/11/17 08:00',
-//   status:'UpcomingJobs',
-//   operatorName:'NotAssigned',
-//   scheduledInterruptiontime:'06:30 to 07:30'
-// },
-// {
-//   OperatingAuthNo:'S10-55748-S2',
-//   ApplicantNumber:'#339528',
-//   Location:'MAJESTIC',
-//   StartTime:'09/11/17 13:00',
-//   EndTime:'09/11/17 15:00',
-//   status:'UpcomingJobs',
-//   operatorName:'NotAssigned',
-//   scheduledInterruptiontime:'13:15 to 14:45'
-// },
-// {
-// OperatingAuthNo:'S10-55749-S1',
-// ApplicantNumber:'#339529',
-// Location:'WHITEFIELD',
-// StartTime:'09/12/17 12:30',
-// EndTime:'09/12/17 02:30',
-// status:'UpcomingJobs',
-// operatorName:'NotAssigned',
-// scheduledInterruptiontime:'01:00 to 02:00'
-// },
-// {
-// OperatingAuthNo:'S10-55750-S2',
-// ApplicantNumber:'#339530',
-// Location:'BOMMANHALLI',
-// StartTime:'09/12/17 09:00',
-// EndTime:'09/12/17 11:00',
-// status:'UpcomingJobs',
-// operatorName:'NotAssigned',
-// scheduledInterruptiontime:'09:30 to 10:00'
-//
-// }
-// ];
 
-// controller.getAppNoDetails=function(req,res){
-//   console.log('-------------api connected for get each application data-----------');
-//   console.log(req.params);
-// }
+
+controller.getApplicationData=function(req,res){
+  let applicationID=req.params.applicationID;
+  // applicationID = applicationID.substring(1);
+  console.log('applicationID received for get applicationID');
+  console.log(applicationID);
+  applicationID='#'+applicationID;
+  JobApplicationData.find({applicationID:applicationID}).exec(function(err,data){
+         if(err) { console.log('server error in get'+err); }
+         else{
+           // console.log(data);
+           // console.log(data);
+          res.json({message:data});
+         }
+       });
+}
+
 controller.patchoperatorData=function(req,res){
   console.log('api connected for patch operation');
 console.log('req rec for job progress');
@@ -144,10 +95,13 @@ if(req.body.requestType=='InitiateJobRequest'){
 });
 }
 else if(req.body.requestType=='PermitIssued'){
+  console.log('req received to server for permit issue');
+  console.log('data reach here is');
+  console.log(req.body);
   JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
                                     {$set:{
                                      permitNumber:req.body.permitNumber,
-                                     jobProgress:req.body.jobProgress
+                                     JobProgress:req.body.JobProgress
                     }},function(err, data){
                       if(err) { console.log('server error in get'+err); }
                       else{
@@ -213,10 +167,10 @@ controller.getFilterData=function(req,res){
   // console.log(req.params.applicationRequest);
   console.log('api connected for status based application data');
   // var par=req.params.applicationRequest;
-  console.log(req.params);
-  console.log(req.params.applicationRequest);
-  if(req.params.applicationRequest=='NotStarted' ||req.params.applicationRequest=='Ongoing'||req.params.applicationRequest=='Completed'){
-    JobApplicationData.find({status:req.params.applicationRequest}).exec(function(err,data){
+  // console.log(req.params);
+  console.log(req.params.status);
+  // if(req.params.applicationRequest=='NotStarted' ||req.params.applicationRequest=='Ongoing'||req.params.applicationRequest=='Completed'){
+    JobApplicationData.find({status:req.params.status}).exec(function(err,data){
              if(err) { console.log('server error in get'+err); }
              else{
                // console.log(data);
@@ -224,16 +178,16 @@ controller.getFilterData=function(req,res){
               res.json({message:data});
              }
            });
-  }else{
-    JobApplicationData.find({applicationID:req.params.applicationRequest}).exec(function(err,data){
-             if(err) { console.log('server error in get'+err); }
-             else{
-               // console.log(data);
-              //  console.log(data);
-              res.json({message:data});
-             }
-           });
-  }
+  // }else{
+  //   JobApplicationData.find({applicationID:req.params.applicationRequest}).exec(function(err,data){
+  //            if(err) { console.log('server error in get'+err); }
+  //            else{
+  //              // console.log(data);
+  //             //  console.log(data);
+  //             res.json({message:data});
+  //            }
+  //          });
+  // }
   // console.log(req.params.applicationRequest.type);
   // console.log(req.params.applicationRequest[0]);
     // console.log(req.params.applicationRequest[0].type);

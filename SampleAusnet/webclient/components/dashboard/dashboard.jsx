@@ -45,19 +45,14 @@ getAppNoDetails=(data)=>
 
 // api function to get job  Details of a particular application number
 getJobProfile=(localApplicationNumber)=>{
-	console.log('api call for each application from client');
-	console.log('app id is');
-	console.log(localApplicationNumber);
- Axios.get('/api/v1/Job/'+localApplicationNumber)
+	console.log('api call for each application from client and applicationID is'+localApplicationNumber);
+  localApplicationNumber = localApplicationNumber.substring(1);
+ Axios.get('/api/v1/Job/applicationID/'+localApplicationNumber)
  .then(function (data) {
-  console.log('data from server is');
-  console.log(data);
-  data.data.message.forEach((data)=>{
- 	 if(data.applicationID==localApplicationNumber){
- 		 //set the state here for individual application number -------------- later we ll do server side api for each application number
- 		 this.setState({jobDetailArr:data});
- 	 }
-  })
+   if(data.data.message.length!=0){
+   this.setState({jobDetailArr:data.data.message[0]});}else{
+     alert('application not found');
+   }
  }.bind(this))
  .catch(function (error) {
   console.log(error+"error in jobDetail for status");
@@ -103,7 +98,7 @@ getjobDetails=()=>{
 								//  let applicationRequest={
 								// 	 value:data
 								//  }
-          Axios.get('/api/v1/Job/'+data)
+          Axios.get('/api/v1/Job/status/'+data)
           .then(function (data) {
 						console.log(data.data.message);
             this.setState({jobData:data.data.message});
@@ -206,27 +201,25 @@ myFunction=(msg)=>{
   let currentJobData=this.state.jobData;
   let currentUpcomingArr =this.state.upcomingArr;
   let currentAppData=this.state.jobDetailArr;
-console.log('current upcoming data is');
-console.log(currentUpcomingArr);
+  console.log('current upcoming data is');
+  console.log(currentUpcomingArr);
   // console.log(currentUpcomingArr);
-  Axios.get('/api/v1/Job/')
+  let applicationID = msg.substring(1);
+  Axios.get('/api/v1/Job/applicationID/'+applicationID)
   .then(function (data) {
    console.log('data from server is');
    console.log(data);
-   data.data.message.forEach((data)=>{
-    if(data.applicationID==msg){
-      console.log(data);
+
       currentJobData.forEach((datas,i)=>{
         if(datas.applicationID==msg){
-       var editData=currentJobData.splice(i,1,data);
+       var editData=currentJobData.splice(i,1,data.data.message[0]);
        editData=null;
         }
       })
 
-      // for all  jobs
       currentUpcomingArr.forEach((datas,i)=>{
         if(datas.applicationID==msg){
-       var editDataupcoming=currentUpcomingArr.splice(i,1,data);
+       var editDataupcoming=currentUpcomingArr.splice(i,1,data.data.message[0]);
        editDataupcoming=null;
         }
       })
@@ -238,10 +231,8 @@ console.log(currentUpcomingArr);
       //set the state here for individual application number -------------- later we ll do server side api for each application number
        this.setState({jobData:currentJobData,upcomingArr:currentUpcomingArr});
        if(currentAppData.applicationID==msg){
-         this.setState({jobDetailArr:data});
+         this.setState({jobDetailArr:data.data.message[0]});
        }
-    }
-   })
   }.bind(this))
   .catch(function (error) {
    console.log(error+"error in jobDetail for status");
@@ -266,18 +257,15 @@ console.log(currentUpcomingArr);
     console.log('current upcoming data is');
     // console.log(currentUpcomingArr);
       // console.log(currentUpcomingArr);
-      Axios.get('/api/v1/Job/')
+      let applicationID=msg.substring(1);
+      Axios.get('/api/v1/Job/applicationID/'+applicationID)
       .then(function (data) {
        console.log('data from server is');
        console.log(data);
-       data.data.message.forEach((data)=>{
-        if(data.applicationID==msg){
-          console.log(data);
-           if(currentAppData.applicationID==data.applicationID){
-             this.setState({jobDetailArr:data});
+
+           if(currentAppData.applicationID==msg){
+             this.setState({jobDetailArr:data.data.message[0]});
            }
-        }
-       })
       }.bind(this))
       .catch(function (error) {
        console.log(error+"error in jobDetail for status");
@@ -306,14 +294,12 @@ console.log(currentUpcomingArr);
       // }else if(currentAppData.status=='Completed'){
       //     this.setState({jobDetailArr:currentCompleted[0]});
       // }
-
-      Axios.get('/api/v1/Job/')
+      let applicationID=msg.substring(1);
+      Axios.get('/api/v1/Job/applicationID/'+applicationID)
       .then(function (data) {
        console.log('data from server is');
        console.log(data);
-       data.data.message.forEach((data)=>{
-        if(data.applicationID==msg){
-          console.log(data);
+
           //  if(currentAppData.applicationID==data.applicationID){
           //    this.setState({jobDetailArr:data});
           //  }
@@ -323,13 +309,15 @@ console.log(currentUpcomingArr);
                   editData=null;
         		}
         	})
+
           currentJobData.forEach((data,i)=>{
         		if(data.applicationID==msg){
         			var editData=currentJobData.splice(i,1);
                   editData=null;
         		}
         	})
-          var newData=[data].concat(currentCompleted);
+
+          var newData=[data.data.message[0]].concat(currentCompleted);
         	// currentCompleted.forEach((data,i)=>{
         	// 	if(data.applicationID==obj.applicationID){
         	// 		var editData=currentJobData.splice(i,1);
@@ -338,9 +326,6 @@ console.log(currentUpcomingArr);
         	// })
         	this.setState({ongoingArr:currentOngoingData,completedArr:newData,jobData:currentJobData,jobDetailArr:currentJobData[0]});
           // this.setState({ongoingArrlen:currentOngoingData.length,completedArrlen:newData.length});
-
-        }
-       })
       }.bind(this))
       .catch(function (error) {
        console.log(error+"error in jobDetail for status");
@@ -461,9 +446,7 @@ handleUpdateInput = (searchText) => {
          </Grid.Column>
 
          <Grid.Column width={10} style={{background:'#fff'}}>
-<JobApplication  jobDetailArr={this.state.jobDetailArr} approvalData={this.approvalData}/>
-
-
+           <JobApplication  jobDetailArr={this.state.jobDetailArr} approvalData={this.approvalData}/>
          </Grid.Column>
      </Grid.Row>
 </Grid>
