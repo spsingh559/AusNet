@@ -43,6 +43,7 @@ io.on('connection',function(socket){
   // redisClient.subscribe('ApprovalChanel');
   redisClient.subscribe('InitiateJobRequestRedisV1');
   redisClient.subscribe('InitiateJobNotificationRedis');
+  redisClient.subscribe('InitiateJobPauseNotificationRedis');
   redisClient.subscribe('JobActivityMsgRedis');
   redisClient.subscribe('JobCompletionMsgRedis');
   console.log('subscribe here');
@@ -63,9 +64,13 @@ io.on('connection',function(socket){
    console.log(message);
    io.emit('JobActivityMsgWeb',message);
  }else if(channel=='JobCompletionMsgRedis'){
-   console.log('message rcv for Job Completion');{
+   console.log('message rcv for Job Completion');
      io.emit('JobCompletionMsgWeb',message);
    }
+   else if(channel=='InitiateJobPauseNotificationRedis'){
+     console.log('message rcv for Job Completion');{
+       io.emit('InitiateJobPauseNotificationWeb',message);
+     }
  }
 });
 

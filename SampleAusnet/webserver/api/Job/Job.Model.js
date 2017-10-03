@@ -16,6 +16,7 @@ var jobApplicationSchema = new mongoose.Schema({
     recepientName:String,
     recepientContactNumber:String,
     scheduledInterruptionTime:String,
+    applicationCompletionTime:String,  
     permitNumber:Number,
     JobProgress:[{
       stepID:Number,

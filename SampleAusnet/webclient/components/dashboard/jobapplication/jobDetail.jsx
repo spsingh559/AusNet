@@ -104,6 +104,12 @@ render () {
     default:
 
   }
+  let completionTime;
+  if(this.props.jobDetailArr.applicationCompletionTime!=''){
+    completionTime= ' at ' + this.props.jobDetailArr.applicationCompletionTime;
+  }else{
+    completionTime=null;
+  }
 return (
   <Grid columns={3} >
      <Grid.Row style={{marginTop:20,textAlign:'center',marginLeft:380,fontWeight:'bold'}}>
@@ -116,7 +122,7 @@ return (
            Location:<br/>{this.props.jobDetailArr.location}<br /><br />
            Scheduled Start time:<br/>{this.props.jobDetailArr.startTime}<br /><br />
            Scheduled Interruption time:<br/>{this.props.jobDetailArr.scheduledInterruptionTime}<br /><br />
-           Status: <br />{status}<br />
+           Status: <br />{status} {completionTime}<br />
            <div style={{marginTop:'40'}}>
              {buttonStatus}
            </div>
