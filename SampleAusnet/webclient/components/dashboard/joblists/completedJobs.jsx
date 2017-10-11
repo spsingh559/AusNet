@@ -21,6 +21,7 @@ export default class CompletedJobs extends React.Component {
 	render () {
   console.log(this.props.completedArr);
   let arr=[];
+	if(this.props.completedArr.length!=0){
   this.props.completedArr.forEach((data,i)=>{
 		arr.push(<div key={i}>
 
@@ -35,7 +36,9 @@ export default class CompletedJobs extends React.Component {
 
         </List>
 		</div>);
-  })
+  })}else{
+		arr.push(<div key='one'>No Completed Job available </div>)
+	}
 		return (
 
 			<div>

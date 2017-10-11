@@ -19,6 +19,7 @@ export default class OngoingJobs extends React.Component {
 	render () {
   console.log(this.props.ongoingArr);
   let arr=[];
+	if(this.props.ongoingArr.length!=0){
   this.props.ongoingArr.forEach((data,i)=>{
 		arr.push(<div key={i}>
 
@@ -33,7 +34,9 @@ export default class OngoingJobs extends React.Component {
 
         </List>
 		</div>);
-  })
+  })}else{
+		arr.push(<div key='one'> No Ongoing Jobs available</div>);
+	}
 		return (
 
 			<div>

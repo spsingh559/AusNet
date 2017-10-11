@@ -5,8 +5,7 @@ export default class JobProgress extends React.Component {
 
 
 render () {
-console.log('in jobProgress comp');
-console.log(this.props.jobDetailArr);
+
 return (
 
     <div>

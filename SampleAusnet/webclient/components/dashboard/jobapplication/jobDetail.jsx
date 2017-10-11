@@ -72,18 +72,28 @@ this.props.approvalData(obj);
   }
 
 pauseJob=()=>{
+  var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes();
+    let notificationString = this.props.jobDetailArr.applicationID +','+ 'Job has been paused by CEOT Jacob Mathew,' + time;
+    this.context.socket.emit('InitiateJobPauseNotificationCEOT', notificationString);
   alert('request sent to operator');
+
 }
 
 render () {
   console.log('jobDetail component called');
   console.log(this.props.jobDetailArr);
+  const {applicationID, operatingAuthNo,
+    location, operatorName, recepientName,
+    startTime,scheduledInterruptionTime,
+    applicationCompletionTime,
+    applicationActiveStatus,permitNumber} = this.props.jobDetailArr;
   // console.log(this.props.jobDetailArr.applicationID);
     let buttonStatus;
   let cardStatus=null;
   let status;
   switch (this.props.jobDetailArr.status) {
-    case 'NotStarted':if(this.props.jobDetailArr.applicationActiveStatus==false){ buttonStatus=null;   cardStatus=null; status='Not Started';}
+    case 'NotStarted':if(applicationActiveStatus==false){ buttonStatus=null;   cardStatus=null; status='Not Started';}
                       else{
                         buttonStatus=  [<Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#057EF7 '}} onClick={this.sendApproveMsg} >Approve</Button>  ]
                             cardStatus=null;
@@ -94,34 +104,34 @@ render () {
                     status='Ongoing'
                   this.props.jobDetailArr.JobProgress.forEach((data)=>{
                     if(data.stepID==5 && data.status==true){
-                      cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {this.props.jobDetailArr.permitNumber}</div>]
+                      cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {permitNumber}</div>]
                     }
                   })
     break;
     case 'Completed':buttonStatus=null;
                       status='Completed';
-                      cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {this.props.jobDetailArr.permitNumber}</div>]
+                      cardStatus=[<div><Image src='../images/permit Image.JPG' /> <br /> Permit No: {permitNumber}</div>]
     default:
 
   }
   let completionTime;
-  if(this.props.jobDetailArr.applicationCompletionTime!=''){
-    completionTime= ' at ' + this.props.jobDetailArr.applicationCompletionTime;
+  if(applicationCompletionTime!=''){
+    completionTime= ' at ' + applicationCompletionTime;
   }else{
-    completionTime=null;
+    completionTime='';
   }
 return (
   <Grid columns={3} >
      <Grid.Row style={{marginTop:20,textAlign:'center',marginLeft:380,fontWeight:'bold'}}>
-       Application {this.props.jobDetailArr.applicationID}
+       Application {applicationID}
      </Grid.Row>
 
        <Grid.Row stretched>
          <Grid.Column width={6} style={{marginLeft:20}}>
-           Operating Auth. No:<br/>{this.props.jobDetailArr.operatingAuthNo}<br/>
-           Location:<br/>{this.props.jobDetailArr.location}<br /><br />
-           Scheduled Start time:<br/>{this.props.jobDetailArr.startTime}<br /><br />
-           Scheduled Interruption time:<br/>{this.props.jobDetailArr.scheduledInterruptionTime}<br /><br />
+           Operating Auth. No:<br/>{operatingAuthNo}<br/>
+           Location:<br/>{location}<br /><br />
+           Scheduled Start time:<br/>{startTime}<br /><br />
+           Scheduled Interruption time:<br/>{scheduledInterruptionTime}<br /><br />
            Status: <br />{status} {completionTime}<br />
            <div style={{marginTop:'40'}}>
              {buttonStatus}
@@ -132,13 +142,13 @@ return (
                   style={{width:'65px',height:'35px',borderRadius:70,border:'0.5px solid grey',marginLeft:0,marginTop:0}}/>
            <p>
              <span style={{fontWeight:'bold'}}>Operator</span><br />
-             <span>{this.props.jobDetailArr.operatorName}</span>
+             <span>{operatorName}</span>
            </p>
            <Image src='http://www.freeiconspng.com/uploads/male-icon-4.jpg'  centered shape='circular'
                   style={{width:'65px',height:'35px',borderRadius:70,border:'0.5px solid grey',marginLeft:0,marginTop:0}}/>
            <p>
              <span style={{fontWeight:'bold'}}>Recipient</span><br />
-             <span>{this.props.jobDetailArr.recepientName}</span>
+             <span>{recepientName}</span>
            </p>
            {/* <div>
              <Button style={{marginLeft:'10',color:'#fff',backgroundColor:'#5D5D5D '}}  disabled={true}>Call</Button>

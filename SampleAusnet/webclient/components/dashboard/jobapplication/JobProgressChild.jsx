@@ -58,8 +58,6 @@ if(count==0){
   }
 
 
-console.log('arr is'+ arr);
-console.log('arr1 is '+ arr1);
     return (
       <div style={{width: '100%', maxWidth: '100%', margin: 'auto'}}>
         <Stepper activeStep={firstIndex}>

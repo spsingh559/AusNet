@@ -64,7 +64,7 @@ if(req.body.requestType=='InitiateJobRequest'){
 
 }else if (req.body.requestType=='JobActivity') {
   console.log('req reach to server for update of JobActivity');
-  console.log(req.body);
+  // console.log(req.body);
   JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
                                     {$set:{
                                      JobProgress:req.body.JobProgress
@@ -82,7 +82,8 @@ if(req.body.requestType=='InitiateJobRequest'){
 }else if(req.body.requestType=='JobCompletion'){
   JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
                                     {$set:{
-                                     status:req.body.status
+                                     status:req.body.status,
+                                     applicationCompletionTime:req.body.applicationCompletionTime
                     }},function(err, data){
                       if(err) { console.log('server error in get'+err); }
                       else{
@@ -97,7 +98,7 @@ if(req.body.requestType=='InitiateJobRequest'){
 else if(req.body.requestType=='PermitIssued'){
   console.log('req received to server for permit issue');
   console.log('data reach here is');
-  console.log(req.body);
+  // console.log(req.body);
   JobApplicationData.findOneAndUpdate({applicationID:req.body.applicationID},
                                     {$set:{
                                      permitNumber:req.body.permitNumber,

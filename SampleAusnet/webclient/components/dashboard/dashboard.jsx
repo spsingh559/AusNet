@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Container,Grid,Search, Header, Icon, Modal} from 'semantic-ui-react';
+import {Button,Container,Grid,Search, Header, Icon, Modal,Divider} from 'semantic-ui-react';
 import AutoComplete from 'material-ui/AutoComplete';
 import AusnetServices from './ausnetservices/ausnetservices.jsx';
 import JobList from './joblists/joblist.jsx';
@@ -53,13 +53,10 @@ getJobProfile=(localApplicationNumber)=>{
   localApplicationNumber = localApplicationNumber.substring(1);
  Axios.get('/api/v1/Job/applicationID/'+localApplicationNumber)
  .then(function (data) {
-   if(data.data.message.length!=0){
-   this.setState({jobDetailArr:data.data.message[0]});}else{
-     alert('application not found');
-   }
+   this.setState({jobDetailArr:data.data.message[0]});
  }.bind(this))
  .catch(function (error) {
-  console.log(error+"error in jobDetail for status");
+  console.log(error+"error in getting particular applicationID");
  });
 }
 
@@ -103,17 +100,32 @@ getjobDetails=()=>{
 								// 	 value:data
 								//  }
                   this.setState({flag:0});
+          // Axios.get('/api/v1/Job/status/'+data)
+          // .then(function (data) {
+          //
+          //   this.setState({jobData:data.data.message});
+          //   if(data.data.message.length!=0){
+					// 	this.setState({jobDetailArr:this.state.jobData[0]});
+          // }
+          //
+          // }.bind(this))
+          // .catch(function (error) {
+          //   console.log(error+"error in getting data from filter");
+          // });
           Axios.get('/api/v1/Job/status/'+data)
-          .then(function (data) {
-						console.log(data.data.message);
-            this.setState({jobData:data.data.message});
-						console.log(this.state.jobData);
-						this.setState({jobDetailArr:this.state.jobData[0]});
-
-          }.bind(this))
-          .catch(function (error) {
-            console.log(error+"error in jobDetail for status");
-          });
+      .then(function (data) {
+                     console.log(data.data.message);
+        this.setState({jobData:data.data.message});
+                     console.log(this.state.jobData);
+                      if(data.data.message.length==0){
+                        this.setState({jobDetailArr:[]})
+                    }else{
+                    this.setState({jobDetailArr:this.state.jobData[0]})
+                  };
+      }.bind(this))
+      .catch(function (error) {
+        console.log(error+"error in jobDetail for status");
+      });
         }
 
 //get job state from child Component
@@ -178,7 +190,7 @@ getNumberOfJobs=()=>
 
 //to render componenet based on jobState
 jobFilter=(data)=>
-{
+{console.log('data is'+data);
   if(this.state.flag==1)
    {
 return <SearchResults searchData={this.state.jobDetailArr}/>
@@ -192,7 +204,7 @@ else if (data=='NotStarted') {
 
 	return <UpcomingJobs jobState={this.state.jobState} upcomingArr={this.state.jobData} getAppNoDetails={this.getAppNoDetails}/>
 }
-else if (data=='OngoingJobs') {
+else if (data=='Ongoing') {
 	return <OngoingJobs jobState={this.state.jobState} ongoingArr={this.state.jobData} getAppNoDetails={this.getAppNoDetails}/>
 }
 else  {
@@ -211,19 +223,14 @@ static get contextTypes() {
 myFunction=(msg)=>{
   // alert('hi');
   console.log('my function call after 2 seconds');
+  console.log('id reached here----------- is'+ msg);
   let currentJobData=this.state.jobData;
   let currentUpcomingArr =this.state.upcomingArr;
   let currentAppData=this.state.jobDetailArr;
-  console.log('current upcoming data is');
-  console.log(currentUpcomingArr);
-  // console.log(currentUpcomingArr);
   let applicationID = msg.substring(1);
   Axios.get('/api/v1/Job/applicationID/'+applicationID)
   .then(function (data) {
-   console.log('data from server is');
-   console.log(data);
-
-      currentJobData.forEach((datas,i)=>{
+        currentJobData.forEach((datas,i)=>{
         if(datas.applicationID==msg){
        var editData=currentJobData.splice(i,1,data.data.message[0]);
        editData=null;
@@ -237,18 +244,13 @@ myFunction=(msg)=>{
         }
       })
 
-      console.log('currentUpcomingArr after initiate job is');
-      console.log(currentUpcomingArr);
-      console.log('current current Job data');
-      console.log(currentJobData);
-      //set the state here for individual application number -------------- later we ll do server side api for each application number
        this.setState({jobData:currentJobData,upcomingArr:currentUpcomingArr});
        if(currentAppData.applicationID==msg){
          this.setState({jobDetailArr:data.data.message[0]});
        }
   }.bind(this))
   .catch(function (error) {
-   console.log(error+"error in jobDetail for status");
+   console.log(error+"error in getting particular applicationID data");
   });
 }
 	componentDidMount=()=>{
@@ -257,12 +259,8 @@ myFunction=(msg)=>{
       setTimeout(this.myFunction(msg), 2000);
 			console.log('socket initiated here for JOb Inititation------------------');
 				console.log(msg);
-				// console.log('obj after assign value is');
-				// console.log(newObj);
-
-
-		// alert('i hc recv message');
 		});
+
     this.context.socket.on('JobActivityMsgWeb',(msg)=>{
       let currentAppData=this.state.jobDetailArr;
       console.log('current upcoming data is');
@@ -271,16 +269,16 @@ myFunction=(msg)=>{
       .then(function (data) {
          console.log('data from server is');
          console.log(data);
+         console.log(data.data.message);
            if(currentAppData.applicationID==msg){
              this.setState({jobDetailArr:data.data.message[0]});
            }
       }.bind(this))
       .catch(function (error) {
-       console.log(error+"error in jobDetail for status");
+       console.log(error+"error in getting particular applicationID in JobActivityMsgWeb socket");
       });
-
-
     })
+
     this.context.socket.on('JobCompletionMsgWeb',(msg)=>{
       let currentOngoingData=this.state.ongoingArr;
     	let currentCompleted=this.state.completedArr;
@@ -289,40 +287,54 @@ myFunction=(msg)=>{
       let currentJobData=this.state.jobData;
       let currentOngoingArrLength=this.state.ongoingArrlen;
       let currentCompletedDataLength=this.state.completedArrlen;
-      console.log('current state of Checkbox is');
+
+      currentOngoingData.forEach((datas,i)=>{
+        if(datas.applicationID==msg){
+          var editData=currentOngoingData.splice(i,1);
+              editData=null;
+        }
+      })
+
+      currentJobData.forEach((data,i)=>{
+        if(data.applicationID==msg){
+          var editData=currentJobData.splice(i,1);
+              editData=null;
+        }
+      })
+
+      if(currentJobData.length==0){
+        this.setState({jobDetailArr:[]})
+    }else{
+    this.setState({jobDetailArr:currentJobData[0]})
+    };
+
+    this.setState({ongoingArrlen:currentOngoingArrLength-1,completedArrlen:currentCompletedDataLength+1});
+    this.setState({ongoingArr:currentOngoingData,jobData:currentJobData});
+
+
+
       let applicationID=msg.substring(1);
       Axios.get('/api/v1/Job/applicationID/'+applicationID)
       .then(function (data) {
        console.log('data from server is');
        console.log(data);
+      var newData=[data.data.message[0]].concat(currentCompleted);
+    //   if(newData.length==0){
+    //     this.setState({jobDetailArr:[]})
+    // }else{
+    // this.setState({jobDetailArr:newData[0]})
+    // };
 
-          //  if(currentAppData.applicationID==data.applicationID){
-          //    this.setState({jobDetailArr:data});
-          //  }
-          currentOngoingData.forEach((datas,i)=>{
-        		if(datas.applicationID=msg){
-        			var editData=currentOngoingData.splice(i,1);
-                  editData=null;
-        		}
-        	})
-
-          currentJobData.forEach((data,i)=>{
-        		if(data.applicationID==msg){
-        			var editData=currentJobData.splice(i,1);
-                  editData=null;
-        		}
-        	})
-
-          var newData=[data.data.message[0]].concat(currentCompleted);
-            this.setState({ongoingArrlen:currentOngoingArrLength-1,completedArrlen:currentCompletedDataLength+1});
-        	this.setState({ongoingArr:currentOngoingData,completedArr:newData,jobData:currentJobData,jobDetailArr:currentJobData[0]});
-
+    // if(currentOngoingData.length==0){
+    //   this.setState({jobDetailArr:[]})
+    // }else{
+    // this.setState({jobDetailArr:currentOngoingData[0]})
+    // };
+      this.setState({completedArr:newData});
       }.bind(this))
       .catch(function (error) {
-       console.log(error+"error in jobDetail for status");
+       console.log(error+"error in getting particular applicationID in JobCompletionMsgWeb socket");
       });
-
-
     });
 
     //Paused JOb
@@ -369,18 +381,8 @@ approvalData=(obj)=>{
 	let currentJobData=this.state.jobData;
   let currentUpcomingArrLength=this.state.upcomingArrlen;
   let currentOngoingDataLength=this.state.ongoingArrlen;
-	Axios({
-  method: 'patch',
-  url: '/api/v1/Job/',
-  data: obj
-})
-.then(function (data) {
-  console.log('response from server');
-	data.data.message.applicationActiveStatus=obj.applicationActiveStatus;
-	data.data.message.status=obj.status;
-	data.data.message.JobProgress=obj.JobProgress;
-	let newdata=[data.data.message].concat(currentOngoingData);
-	currentUpcomingArr.forEach((data,i)=>{
+
+  currentUpcomingArr.forEach((data,i)=>{
 		if(data.applicationID==obj.applicationID){
 			var editData=currentUpcomingArr.splice(i,1);
           editData=null;
@@ -392,15 +394,44 @@ approvalData=(obj)=>{
           editData=null;
 		}
 	})
+
+  if(currentJobData.length==0){
+    this.setState({jobDetailArr:[]})
+}else{
+this.setState({jobDetailArr:currentJobData[0]})
+};
+
+  this.setState({upcomingArrlen:currentUpcomingArrLength-1,ongoingArrlen:currentOngoingDataLength+1});
+  this.setState({upcomingArr:currentUpcomingArr,jobData:currentJobData});
+
+	Axios({
+  method: 'patch',
+  url: '/api/v1/Job/',
+  data: obj
+})
+.then(function (data) {
+  console.log('response from server');
+	data.data.message.applicationActiveStatus=obj.applicationActiveStatus;
+	data.data.message.status=obj.status;
+	data.data.message.JobProgress=obj.JobProgress;
+	let newdata=[data.data.message].concat(currentOngoingData);
+	this.setState({ongoingArr:newdata});
   // this.setState({upcomingArrlen:currentUpcomingArr.length,ongoingArrlen:newdata.length});
-    this.setState({upcomingArrlen:currentUpcomingArrLength-1,ongoingArrlen:currentOngoingDataLength+1});
-	this.setState({ongoingArr:newdata,upcomingArr:currentUpcomingArr,jobData:currentJobData,jobDetailArr:currentJobData[0]});
+//   if(newdata.length==0){
+//     this.setState({jobDetailArr:[]})
+// }else{
+// this.setState({jobDetailArr:newdata[0]})
+// };
 
+// if(currentUpcomingArr.length==0){
+//   this.setState({jobDetailArr:[]})
+// }else{
+// this.setState({jobDetailArr:currentUpcomingArr[0]})
+// };
 
-
-}.bind(this))
-.catch(function (error) {
-  console.log(error+"error in jobDetail for status");
+  }.bind(this))
+  .catch(function (error) {
+  console.log(error+"error in update api call for approval data");
 });
 }
 
@@ -471,7 +502,7 @@ this.setState({applarr:this.state.applarr})
            <AutoComplete
                              hintText="Search"
                    onUpdateInput={this.handleUpdateInput}
-                   onNewRequest={this.handleNewRequest}
+                   onNewRequest={this.handleNezwRequest}
                    onTouchTap={this.searchApplication}
                              dataSource={this.state.applarr}
                                  filter={AutoComplete.fuzzyFilter}
@@ -481,9 +512,21 @@ this.setState({applarr:this.state.applarr})
 
          </Grid.Column>
 
-         <Grid.Column width={10} style={{background:'#fff'}}>
+         {/* <Grid.Column width={10} style={{background:'#fff'}}>
            <JobApplication  jobDetailArr={this.state.jobDetailArr} approvalData={this.approvalData}/>
-         </Grid.Column>
+         </Grid.Column> */}
+         <Grid.Column width={10} style={{background:'#fff'}}>
+
+
+          { this.state.jobDetailArr.length==0?
+           <div id="noJobs">
+            <Divider horizontal >No jobs available</Divider>
+           </div> :
+          <JobApplication  jobDetailArr={this.state.jobDetailArr}
+                           approvalData={this.approvalData}/>
+        }
+
+        </Grid.Column>
      </Grid.Row>
      <Modal
         open={this.state.modalOpen}

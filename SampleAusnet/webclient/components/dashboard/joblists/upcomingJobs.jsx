@@ -14,10 +14,11 @@ getAppNoDetails=(applicationID)=>{
 	this.props.getAppNoDetails(applicationID);
 }
 	render () {
-		console.log('upcoming component loaded');
-  console.log(this.props.upcomingArr);
+
   let arr=[];
-  let upcomingData=this.props.upcomingArr.map((data,i)=>{
+	let upcomingData;
+	if(this.props.upcomingArr.length!=0){
+  upcomingData=this.props.upcomingArr.map((data,i)=>{
 		return(
 		<div key={i}>
 		<EachupcomingData
@@ -30,7 +31,9 @@ getAppNoDetails=(applicationID)=>{
 			</EachupcomingData>
 		</div>
 	)
-  })
+})}else{
+	upcomingData='No Upcoming Jobs available';
+}
 		return (
 			<div>
             <div style={{fontWeight:'bold',color:'#05A1DC ',height:30,backgroundColor:'#DCDCDC ',paddingTop:5}}>
@@ -43,5 +46,6 @@ getAppNoDetails=(applicationID)=>{
 
 
     );
+
   }
 }

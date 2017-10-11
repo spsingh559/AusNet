@@ -45,6 +45,12 @@ h5{
 
   color: black;
 }
+#noJobs{
+ text-align: center;
+ margin-top: 300px;
+ text-transform: capitalize;
+
+}
 
 .seg{
  padding-top: 170px;

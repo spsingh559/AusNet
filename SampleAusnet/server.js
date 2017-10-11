@@ -91,6 +91,10 @@ socket.on('approvalNotification', function(msg){
   // io.emit('approvalConfirmation', {data:confirmationData});
 });
 
+socket.on('InitiateJobPauseNotificationCEOT',function(msg){
+  publishClient.publish('InitiateJobPauseNotificationCEOTRedis',msg);
+});
+
  });
 
 //Listening to port 8081
