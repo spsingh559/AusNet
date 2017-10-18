@@ -1,0 +1,21 @@
+version: '2'
+services:
+
+  ausnet-www:
+    image: ausnet
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    network_mode: host
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - ausnet-mongo
+
+  ausnet-mongo:
+    image: mongo
+    network_mode: host
+    restart: always
+    expose:
+      - 27017

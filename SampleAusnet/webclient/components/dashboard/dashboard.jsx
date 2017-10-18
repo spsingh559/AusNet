@@ -6,7 +6,7 @@ import JobList from './joblists/joblist.jsx';
 import OngoingJobs from './joblists/ongoingJobs.jsx';
 import UpcomingJobs from './joblists/upcomingJobs.jsx';
 import CompletedJobs from './joblists/completedJobs.jsx';
-import JobApplication from './jobapplication/JobApplication.jsx'
+import JobApplication from './jobapplication/jobApplication.jsx'
 import Axios from 'axios';
 import SearchResults from './joblists/SearchResults.jsx';
 //import Config from '../../../config/url';
